@@ -1,0 +1,112 @@
+// Environment variables to build parallel stages
+def profiles = ''
+def execProfiles = ''
+
+pipeline {
+    agent any
+    stages {
+        stage('Lint with Rubocop') {
+            steps {
+                sh("chmod +x ci/scancli")
+                build_lint()
+            }
+        }
+        stage('Inspec Check') {
+            steps {
+                build_check()
+            }
+        }
+        stage('Exec Profiles') {
+            steps {
+                build_exec()
+            }
+        }
+    }
+}
+
+// Builder function to create linting stages
+void build_lint() {
+    def profiles = []
+    sh(
+        script: 'ci/scancli inspec search -t "$(pwd)"',
+        returnStdout: true
+    ).split('\n').each {
+        if (it =~ /inspec/) {
+            profiles.add(it)
+        }
+    }
+    env.profiles = stringify(profiles)
+    profiles.each { profile ->
+        String action = "Lint:${profile}"
+        echo("---- ${action.toUpperCase()} ----")
+        script {
+            stage(action.toUpperCase()) {
+                dir(profile) {
+                    sh(script: 'docker run --rm --volume "$(pwd):/app" rubocop:1.0 --lint .', returnStatus: true)
+                }
+            }
+        }
+    }
+}
+
+
+// Builder function to create `inspec check` stages
+void build_check() {
+    def profiles = listify(env.profiles)
+    readyProfiles = []
+    profiles.each { profile ->
+        String action = "Inspec Check:${profile}"
+        echo("---- ${action.toUpperCase()} ----")
+        script {
+            stage(action.toUpperCase()) {
+                def status = sh(script: "inspec check '${profile}'", returnStatus: true)
+                echo "${status}"
+                if (status == 0) {
+                    readyProfiles.add(profile)
+                }
+            }
+        }
+    }
+    env.execProfiles = stringify(readyProfiles)
+}
+
+
+// Builder function to create `inspec exec` stages
+void build_exec() {
+    profiles = listify(env.execProfiles)
+    profiles.each { profile ->
+        File file = new File(profile)
+        getParentDir = file.getParentFile()
+        def config = readYaml(file: "${getParentDir}/scan.yml")
+        def image = "${config.get('baseline')}:${config.get('tag')}"
+        String action = "Inspec Exec:${getParentDir}"
+        echo("---- ${action.toUpperCase()} ----")
+        script {
+            stage(action.toUpperCase()) {
+                withDockerRegistry(credentialsId: 'nexus', url: 'https://repo.taptechlab.net/') {
+                    sh("docker pull ${image}")
+                }
+                sh("docker run -d --name ${config.get('name')} ${image}")
+                def status = sh(script: "inspec exec ${profile} -t docker://${config.get('name')}", returnStatus: true)
+                echo "${status}"
+                sh("docker stop ${config.get('name')}")
+                sh("docker rm ${config.get('name')}")
+            }
+        }
+    }
+}
+
+// Env variables must be string or int. Takes a list and converts it into a string
+def stringify(ArrayList<String> myList) {
+    String stringList = myList.toString()
+    return stringList[1..-2]
+}
+
+// Takes a string and converts it into a list
+def listify(String stringList) {
+    ArrayList<String> output = []
+    stringList.tokenize(', ').each {
+        output.add(it) 
+    }
+    return output
+}
