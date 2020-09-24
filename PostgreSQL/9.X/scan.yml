@@ -1,9 +1,0 @@
----
-name: postgres
-baseline: repo.taptechlab.net/postgres_baseline
-tag: v1.0
-scanner:
-- type: inspec
-  runtime: true
-- type: prisma
-  runtime: true

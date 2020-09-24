@@ -1,7 +1,0 @@
----
-name: kubernetes
-baseline: none
-tag: none
-scanner:
-- type: inspec
-  runtime: true
