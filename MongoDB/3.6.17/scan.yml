@@ -1,9 +1,0 @@
----
-name: mongo
-baseline: repo.taptechlab.net/mongo3.6_baseline
-tag: v1.0
-scanner:
-- type: inspec
-  runtime: true
-- type: prisma
-  runtime: false
