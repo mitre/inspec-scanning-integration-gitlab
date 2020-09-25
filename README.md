@@ -1,5 +1,5 @@
 # Security Scanning 
-This repository contains STIG scanning content used in conjunction with the Chef InSpec tool, Anchore or Prisma (Twistlock)
+This repository contains STIG scanning content used in conjunction with the Chef InSpec tool.
  
 * inspec profiles
 
