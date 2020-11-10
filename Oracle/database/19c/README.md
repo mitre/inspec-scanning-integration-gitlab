@@ -63,26 +63,26 @@ inspec --version
 #### Execute a single Control in the Profile <b>[update or remove section based upon technology]</b>
 **Note**: replace the profile's directory name - e.g. - `<Profile>` with `.` if you are in the profile's root directory.
 ```sh
-inspec exec <Profile>/controls/V-61965.rb -t docker://<name_of_container>
+inspec exec <Profile>/controls/V-61965.rb --input user=<auditaccount> password=<auditaccountpassword> host=<containerid> service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> users_allowed_access_to_dictionary_table=true -t docker://<name_of_container> --show-progress
 ```
 or use the `--controls` flag
 ```sh
-inspec exec <Profile> --controls=V-61965 V-68863 -t docker://<name_of_docker_container>
+inspec exec <Profile> --controls=V-61965 V-68863 --input user=<auditaccount> password=<auditaccountpassword> host=<containerid> service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> users_allowed_access_to_dictionary_table=true -t docker://<name_of_container> --show-progress
 ```
 
-#### Execute a Single Control and save results as HTML <b>[update or remove section based upon technology]</b>
+#### Execute a Single Control and save results as JSON <b>[update or remove section based upon technology]</b>
 ```sh
-inspec exec <Profile> --controls=V-61965 -t docker://<name_of_docker_container> --reporter json:results.json
+inspec exec <Profile> --controls=V-61965 --input user=<auditaccount> password=<auditaccountpassword> host=<containerid> service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> users_allowed_access_to_dictionary_table=true -t docker://<name_of_docker_container> --show-progress --reporter json:results.json
 ```
 
 #### Execute All Controls in the Profile <b>[update or remove section based upon technology]</b>
 ```sh
-inspec exec <Profile> -t docker://<name_of_docker_container>
+inspec exec <Profile>--input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> -t docker://Oracle19c --show-progres
 ```
 
-#### Execute all the Controls in the Profile and save results as HTML <b>[update or remove section based upon technology]</b>
+#### Execute all the Controls in the Profile and save results as JSON <b>[update or remove section based upon technology]</b>
 ```sh
-inspec exec <Profile> -t docker://<name_of_docker_container> --reporter json:results.json
+inspec exec <Profile> --input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> -t docker://Oracle19c --show-progres  --reporter json:results.json
 ```
 
 ## Authors
@@ -90,8 +90,6 @@ inspec exec <Profile> -t docker://<name_of_docker_container> --reporter json:res
 Defense Information Systems Agency (DISA) https://www.disa.mil/
 
 STIG support by DISA Risk Management Team and Cyber Exchange https://public.cyber.mil/
-
-
 
 ## Legal Notices
 
