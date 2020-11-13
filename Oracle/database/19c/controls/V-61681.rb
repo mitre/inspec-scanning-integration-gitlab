@@ -114,11 +114,3 @@ control 'V-61681' do
      end
    end
 end
-
-
-#    describe 'A manual review is required to ensure unused database components that are integrated in the DBMS and cannot
-#  be uninstalled must be disabled.' do
-#    skip 'A manual review is required to ensure unused database components that are integrated in the DBMS and cannot
-#  be uninstalled must be disabled.'
-#  end
-#end
