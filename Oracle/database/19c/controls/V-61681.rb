@@ -88,9 +88,37 @@ control 'V-61681' do
 
   (See My Oracle Support Document 948061.1 for more on the chopt command.)"
 
-    describe 'A manual review is required to ensure unused database components that are integrated in the DBMS and cannot
-  be uninstalled must be disabled.' do
-    skip 'A manual review is required to ensure unused database components that are integrated in the DBMS and cannot
-  be uninstalled must be disabled.'
-  end
+   sql = oracledb_session(user: input('user'), password: input('password'), host: input('host'), service: input('service'), sqlplus_bin: input('sqlplus_bin'))
+
+     list_of_installed_components_integrated_into_dbms = sql.query("SELECT parameter, value
+                                                                   from v$option
+                                                                   where parameter in 
+                                                                   (
+                                                                     'Data Mining',
+                                                                   'Oracle Database Extensions for .NET',
+                                                                   'OLAP',
+                                                                   'Partitioning',
+                                                                   'Real Application Testing'
+                                                                  );").column('parameter').uniq
+       if list_of_installed_components_integrated_into_dbms.empty?
+       impact 0.0
+       describe 'There are no oracle database components integrated into the DBMS, control N/A' do
+       skip 'TThere are no oracle database components integrated into the DBMS, control N/A'
+       end
+  else
+       list_of_installed_components_integrated_into_dbms.each do |component|
+       describe "The installed oracle database components integrated into the DBMS: #{component}" do
+       subject { component }
+       it { should be_in input('allowed_oracledb_components_integrated_into_dbms') }
+       end
+     end
+   end
 end
+
+
+#    describe 'A manual review is required to ensure unused database components that are integrated in the DBMS and cannot
+#  be uninstalled must be disabled.' do
+#    skip 'A manual review is required to ensure unused database components that are integrated in the DBMS and cannot
+#  be uninstalled must be disabled.'
+#  end
+#end

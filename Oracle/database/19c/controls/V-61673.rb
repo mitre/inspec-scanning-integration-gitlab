@@ -57,7 +57,26 @@ control 'V-61673' do
 
   Re-assign ownership of authorized objects to authorized object owner accounts."
 
-    describe 'A manual review is required to ensure database objects must be owned by accounts authorized for ownership.' do
-    skip 'A manual review is required to ensure database objects must be owned by accounts authorized for ownership.'
+
+  sql = oracledb_session(user: input('user'), password: input('password'), host: input('host'), service: input('service'), sqlplus_bin: input('sqlplus_bin'))
+
+    dba_object_owners = sql.query('select DISTINCT owner from dba_objects;').column('owner').uniq
+      if dba_object_owners .empty?
+      impact 0.0
+      describe 'There are no oracle dba object owners, control N/A' do
+      skip 'There are no oracle dba object owners, control N/A'
+    end
+    else
+      dba_object_owners .each do |owner|
+      describe "oracle datbase object owner: #{owner}" do
+      subject { owner }
+      it { should be_in input('allowed_dbaobject_owners') }
+      end
+    end
   end
 end
+
+#    describe 'A manual review is required to ensure database objects must be owned by accounts authorized for ownership.' do
+#    skip 'A manual review is required to ensure database objects must be owned by accounts authorized for ownership. List of database objects and owerner {#parameter}'
+#  end
+#end
