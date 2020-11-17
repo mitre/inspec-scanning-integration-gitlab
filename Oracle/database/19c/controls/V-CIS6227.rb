@@ -83,7 +83,7 @@ control 'V-CIS6226' do
     FROM CIS_AUDIT C
     LEFT JOIN AUDIT_ENABLED E
     ON C.AUDIT_OPTION = E.AUDIT_OPTION
-    WHERE E.AUDIT_OPTION IS NULL;").rows()
+    WHERE E.AUDIT_OPTION IS NULL;").column('audit_option')
 
     describe 'LOGON AND LOGOFF Actions are Audited' do
         subject { parameter }

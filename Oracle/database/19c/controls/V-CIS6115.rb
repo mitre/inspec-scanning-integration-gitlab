@@ -34,7 +34,7 @@ system startup.
 			AND PROXY_NAME IS NULL
 			AND SUCCESS = 'BY ACCESS'
 			AND FAILURE = 'BY ACCESS'
-			AND AUDIT_OPTION='PROCEDURE';")
+                        AND AUDIT_OPTION='PROCEDURE';").column('audit_option')
                           
 
 describe 'PA' do

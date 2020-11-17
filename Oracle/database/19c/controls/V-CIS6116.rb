@@ -34,7 +34,7 @@ system startup.
 			AND PROXY_NAME IS NULL
 			AND SUCCESS = 'BY ACCESS'
 			AND FAILURE = 'BY ACCESS'
-			AND AUDIT_OPTION='ALTER SYSTEM';")
+                        AND AUDIT_OPTION='ALTER SYSTEM';").column('audit_option')
                           
 describe 'SAO' do
 subject { parameter }

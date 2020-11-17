@@ -54,7 +54,7 @@ control 'V-61415' do
 
   sql = oracledb_session(user: input('user'), password: input('password'), host: input('host'), service: input('service'), sqlplus_bin: input('sqlplus_bin'))
 
-  db_links = sql.query('SELECT DB_LINK FROM DBA_DB_LINKS;')
+  db_links = sql.query('SELECT DB_LINK FROM DBA_DB_LINKS;').column('db_link')
   describe "The defined oracle database link" do
   subject { db_links }
         it {should be_empty}

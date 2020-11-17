@@ -34,7 +34,7 @@ system startup.
 			AND PROXY_NAME IS NULL
 			AND SUCCESS = 'BY ACCESS'
 			AND FAILURE = 'BY ACCESS'
-			AND AUDIT_OPTION='CREATE SESSION';")
+                        AND AUDIT_OPTION='CREATE SESSION';").column('audit_option')
 
 describe 'CSAOS' do
 subject { parameter }

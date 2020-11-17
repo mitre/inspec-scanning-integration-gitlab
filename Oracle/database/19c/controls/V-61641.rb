@@ -179,8 +179,8 @@ control 'V-61641' do
   end
 
   audit_trail = sql.query("select value from v$parameter where name = 'audit_trail';").column('value')
-  audit_info_captured = sql.query('SELECT * FROM UNIFIED_AUDIT_TRAIL;').column('EVENT_TIMESTAMP')
-  fga_audit_events = sql.query(" SELECT * FROM SYS.UNIFIED_AUDIT_TRAIL WHERE AUDIT_TYPE = 'FineGrainedAudit';").column('TIMESTAMP')
+  audit_info_captured = sql.query("SELECT * FROM 'UNIFIED_AUDIT_TRAIL';").column('EVENT_TIMESTAMP')
+  fga_audit_events = sql.query("SELECT * FROM 'SYS.UNIFIED_AUDIT_TRAIL' WHERE AUDIT_TYPE = 'FineGrainedAudit';").column('TIMESTAMP')
 
   if standard_auditing_used
     describe 'The oracle database audit_trail parameter' do

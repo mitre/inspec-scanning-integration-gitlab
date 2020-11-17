@@ -162,7 +162,7 @@ control 'V-61621' do
   end
 
   audit_trail = sql.query("select value from v$parameter where name = 'audit_trail';").column('value')
-  audit_info_captured = sql.query('SELECT * FROM UNIFIED_AUDIT_TRAIL;').column('EVENT_TIMESTAMP')
+  audit_info_captured = sql.query("select * from 'unified_audit_trail';").column('event_timestamp')
 
   if standard_auditing_used
     describe 'The oracle database audit_trail parameter' do
@@ -173,7 +173,7 @@ control 'V-61621' do
 
   unified_auditing = sql.query("SELECT value FROM V$OPTION WHERE PARAMETER = 'Unified Auditing';").column('value')
 
-  if unified_auditing_used
+ if unified_auditing_used
     describe 'The oracle database unified auditing parameter' do
       subject { unified_auditing }
       it { should_not cmp 'FALSE' }

@@ -34,7 +34,7 @@ sql = oracledb_session(user: input('user'), password: input('password'), host: i
 			AND PROXY_NAME IS NULL
 			AND SUCCESS = 'BY ACCESS'
 			AND FAILURE = 'BY ACCESS'
-			AND AUDIT_OPTION='TRIGGER';")
+                        AND AUDIT_OPTION='TRIGGER';").column('audit_option')
                          
 describe 'TAO' do
 subject { parameter }
