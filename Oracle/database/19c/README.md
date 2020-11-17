@@ -57,6 +57,24 @@ Goto Go to https://docs.docker.com/get-docker/ and consult the documentation for
 ```sh
 inspec --version
 ```
+
+### Setting inputs in inspec.yml <b>[update or remove section based upon technology]</b>
+
+For more information on different options with inputs, refer to: https://docs.chef.io/inspec/inputs/
+
+```yaml
+name: my_profile
+inputs:
+- name: webserver_user # Name is the only required field
+- name: favorite_fruit
+value: banana # You can set a value; priority is 30 for metadata
+- name: meaning_of_life
+type: Numeric
+value: 42
+required: true
+priority: 70
+sensitive: true
+```
 ### How to execute this instance  <b>[update or remove section based upon technology]</b>
 (See: https://www.inspec.io/docs/reference/cli/)
 
@@ -77,12 +95,12 @@ inspec exec <Profile> --controls=V-61965 --input user=<auditaccount> password=<a
 
 #### Execute All Controls in the Profile <b>[update or remove section based upon technology]</b>
 ```sh
-inspec exec <Profile>--input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> -t docker://Oracle19c --show-progres
+inspec exec <Profile>--input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> -t docker://Oracle19c --show-progres
 ```
 
 #### Execute all the Controls in the Profile and save results as JSON <b>[update or remove section based upon technology]</b>
 ```sh
-inspec exec <Profile> --input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> -t docker://Oracle19c --show-progres  --reporter json:results.json
+inspec exec <Profile> --input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> unified_auditing_used=<true/false> -t docker://Oracle19c --show-progres  --reporter json:results.json
 ```
 
 ## Authors
