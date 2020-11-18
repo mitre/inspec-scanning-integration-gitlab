@@ -19,8 +19,6 @@ While the Oracle Database STIG automation profile check was developed to provide
 
 This check provides guidance on the configuration of <b>Oracle Database</b> to address requirements associated with:
 
-<b>[List out technology specific requirements]</b>
-
 ### This STIG Automated Compliance Validation Profile was developed based upon:
 - Oracle Database 12c Security Technical Implementation Guide
 - CIS Oracle Database 19c Benchmark
@@ -30,35 +28,35 @@ This check provides guidance on the configuration of <b>Oracle Database</b> to a
 
 ### Requirements
 
-To run the <b>Oracle </b> STIG Compliance Validation Program......<b>[insert startup requirements]</b>
+To run the <b>Oracle </b> STIG Compliance Validation Program.
 
-#### Database Host  <b>[update or remove section based upon technology]</b>
+#### Database Host  
 - Kubernetes cluster containing Oracle 19c image executing in a docker container.
 - Remote access to Oracle Database Server or Container.
 - Minimum 8GB memory to execute Oracle 19c Database container.
 - Minimum 80GB storage supporting Oracle 19c Database container.
 - Account providing appropriate permissions to perform audit scan.
 
-#### STIG Validation Execution Host <b>[update or remove section based upon technology]</b>
+#### STIG Validation Execution Host 
 - Linux VM or Host
 - sudo access to install packages
 
-#### Required software on STIG Validation Execution Host <b>[update or remove section based upon technology]</b>
+#### Required software on STIG Validation Execution Host 
 - git
 - ssh
 - [InSpec](https://www.chef.io/products/chef-inspec/)
 
-### Setup Environment on STIG Validation Execution Host <b>[update or remove section based upon technology]</b>
+### Setup Environment on STIG Validation Execution Host 
 #### Install InSpec
 Goto https://www.inspec.io/downloads/ and consult the documentation for you Operating System to download and install InSpec.
 Goto Go to https://docs.docker.com/get-docker/ and consult the documentation for your Operating System to download and install Docker.
 
-#### Ensure your InSpec version is at least 4.23.10 <b>[update or remove section based upon technology]</b>
+#### Ensure your InSpec version is at least 4.23.10 
 ```sh
 inspec --version
 ```
 
-### Setting inputs in inspec.yml <b>[update or remove section based upon technology]</b>
+### Setting inputs in inspec.yml 
 
 For more information on different options with inputs, refer to: https://docs.chef.io/inspec/inputs/
 
@@ -75,10 +73,10 @@ required: true
 priority: 70
 sensitive: true
 ```
-### How to execute this instance  <b>[update or remove section based upon technology]</b>
+### How to execute this instance  
 (See: https://www.inspec.io/docs/reference/cli/)
 
-#### Execute a single Control in the Profile <b>[update or remove section based upon technology]</b>
+#### Execute a single Control in the Profile 
 **Note**: replace the profile's directory name - e.g. - `<Profile>` with `.` if you are in the profile's root directory.
 ```sh
 inspec exec <Profile>/controls/V-61965.rb --input user=<auditaccount> password=<auditaccountpassword> host=<containerid> service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> users_allowed_access_to_dictionary_table=true -t docker://<name_of_container> --show-progress
@@ -88,17 +86,17 @@ or use the `--controls` flag
 inspec exec <Profile> --controls=V-61965 V-68863 --input user=<auditaccount> password=<auditaccountpassword> host=<containerid> service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> users_allowed_access_to_dictionary_table=true -t docker://<name_of_container> --show-progress
 ```
 
-#### Execute a Single Control and save results as JSON <b>[update or remove section based upon technology]</b>
+#### Execute a Single Control and save results as JSON 
 ```sh
 inspec exec <Profile> --controls=V-61965 --input user=<auditaccount> password=<auditaccountpassword> host=<containerid> service=<OracleSID> sqlplus_bin=<sqlpluslocation> standard_auditing_used=<true/false> unified_auditing_used=<true/false> users_allowed_access_to_dictionary_table=true -t docker://<name_of_docker_container> --show-progress --reporter json:results.json
 ```
 
-#### Execute All Controls in the Profile <b>[update or remove section based upon technology]</b>
+#### Execute All Controls in the Profile 
 ```sh
 inspec exec <Profile>--input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> -t docker://Oracle19c --show-progres
 ```
 
-#### Execute all the Controls in the Profile and save results as JSON <b>[update or remove section based upon technology]</b>
+#### Execute all the Controls in the Profile and save results as JSON 
 ```sh
 inspec exec <Profile> --input user=<auditaccount> password=<auditaccountpassword> host=<containerid>  service=<OracleSID> sqlplus_bin=<sqlpluslocation> unified_auditing_used=<true/false> -t docker://Oracle19c --show-progres  --reporter json:results.json
 ```
