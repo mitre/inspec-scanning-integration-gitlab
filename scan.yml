@@ -3,37 +3,19 @@ Profiles:
 - name: Apache/Httpd/2.4x/Server
   baseline: repo.taptechlab.net/apache2.4_baseline
   tag: v1.0
-  scanner:
-  - type: inspec
-    runtime: true
 - name: Apache/Httpd/2.4x/Site
   baseline: repo.taptechlab.net/apache2.4_baseline
   tag: v1.0
-  scanner:
-  - type: inspec
-    runtime: true
 - name: Apache/Tomcat/9.0.37
   baseline: repo.taptechlab.net/tomcat
   tag: 9-jdk11-openjdk
-  scanner:
-  - type: inspec
-    runtime: true
 - name: Kubernetes/Kubernetes_1.16
   baseline: none
   tag: none
   server: 52.222.10.122
-  scanner:
-  - type: inspec
-    runtime: true
 - name: MongoDB/3.6.17
   baseline: repo.taptechlab.net/mongo3.6_baseline
   tag: v1.0
-  scanner:
-  - type: inspec
-    runtime: true
 - name: PostgreSQL/9.X
   baseline: repo.taptechlab.net/postgres_baseline
   tag: v1.0
-  scanner:
-  - type: inspec
-    runtime: true

@@ -1,0 +1,38 @@
+include: 
+  - local: /ci/templates/.check-template.yml
+
+check Apache_Httpd_2.4x_Server:
+  extends: .ci:stage:check:inspec
+  variables:
+    PROFILE: 'Apache/Httpd/2.4x/Server'
+  needs: ["lint Apache_Httpd_2.4x_Server"]
+
+check Apache_Httpd_2.4x_Site:
+  extends: .ci:stage:check:inspec
+  variables:
+    PROFILE: 'Apache/Httpd/2.4x/Site'
+  needs: ["lint Apache_Httpd_2.4x_Site"]
+
+# check Kubernetes_Kubernetes_1.16:
+#   extends: .ci:stage:check:inspec
+#   variables:
+#     PROFILE: 'Kubernetes/Kubernetes_1.16'
+#   needs: ["lint Kubernetes_Kubernetes_1.16"]
+
+check Apache_Tomcat/9.0.37:
+  extends: .ci:stage:check:inspec
+  variables:
+    PROFILE: 'Apache/Tomcat/9.0.37'
+  needs: ["lint Apache_Tomcat/9.0.37"]
+
+check MongoDB_3.6.17:
+  extends: .ci:stage:check:inspec
+  variables:
+    PROFILE: 'MongoDB/3.6.17'
+  needs: ["lint MongoDB_3.6.17"]
+  
+check PostgreSQL_9.X:
+  extends: .ci:stage:check:inspec
+  variables:
+    PROFILE: 'PostgreSQL/9.X'
+  needs: ["lint PostgreSQL_9.X"]

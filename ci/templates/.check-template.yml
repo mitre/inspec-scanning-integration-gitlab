@@ -1,0 +1,6 @@
+.ci:stage:check:inspec: 
+    tags:
+      - docker
+    stage: check
+    script:
+      - docker run --rm -v $CI_PROJECT_DIR/$PROFILE:/share chef/inspec check --chef-license accept-silent .

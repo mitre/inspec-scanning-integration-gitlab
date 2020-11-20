@@ -1,0 +1,38 @@
+include: 
+    - local: /ci/templates/.lint-template.yml
+  
+lint Apache_Httpd_2.4x_Server:
+    extends: .ci:stage:lint:inspec
+    variables:
+        PROFILE: 'Apache/Httpd/2.4x/Server'
+    allow_failure: true
+
+lint Apache_Httpd_2.4x_Site:
+    extends: .ci:stage:lint:inspec
+    variables:
+        PROFILE: 'Apache/Httpd/2.4x/Site'
+    allow_failure: true
+
+lint Kubernetes_Kubernetes_1.16:
+    extends: .ci:stage:lint:inspec
+    variables:
+        PROFILE: 'Kubernetes/Kubernetes_1.16'
+    allow_failure: true
+
+lint Apache_Tomcat/9.0.37:
+    extends: .ci:stage:lint:inspec
+    variables:
+        PROFILE: 'Apache/Tomcat/9.0.37'
+    allow_failure: true
+
+lint MongoDB_3.6.17:
+    extends: .ci:stage:lint:inspec
+    variables:
+        PROFILE: 'MongoDB/3.6.17'
+    allow_failure: true
+    
+lint PostgreSQL_9.X:
+    extends: .ci:stage:lint:inspec
+    variables:
+        PROFILE: 'PostgreSQL/9.X'
+    allow_failure: true

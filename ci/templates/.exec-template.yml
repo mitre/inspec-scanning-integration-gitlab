@@ -1,0 +1,19 @@
+.ci:stage:exec:inspec:
+    tags:
+        - docker
+    variables:
+        TARGET_NAME: '$CI_COMMIT_SHORT_SHA'
+        SOCKET: '/var/run/docker.sock:/var/run/docker.sock'
+        INSPEC_LICENSE: '--chef-license accept-silent'
+        INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:report.json'
+    stage: exec
+    script:
+        - echo $TARGET_NAME
+        - docker login repo.dsolab.io -u admin -p $CI_PW
+        - docker pull $TARGET
+        - docker run -d --name $TARGET_NAME $TARGET
+        - docker run --rm -v $CI_PROJECT_DIR/$PROFILE:/share -v $SOCKET chef/inspec exec $INSPEC_LICENSE . -t docker://$TARGET_NAME $INSPEC_REPORT_PARAMS || true
+        - mv $CI_PROJECT_DIR/$PROFILE/report.json $CI_PROJECT_DIR/report.json
+    artifacts:
+        paths:
+        - $CI_PROJECT_DIR/report.json
