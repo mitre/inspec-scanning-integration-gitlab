@@ -1,0 +1,44 @@
+include: 
+    - local: /ci/templates/.exec-template.yml
+
+exec Apache_Httpd_2.4x_Server:
+    extends: .ci:stage:exec:inspec
+    variables:
+        PROFILE: 'Apache/Httpd/2.4x/Server'
+        TARGET: 'repo.dsolab.io/baselines/apache2.4_baseline:1.1'
+    needs: ["check Apache_Httpd_2.4x_Server"]
+
+exec Apache_Httpd_2.4x_Site:
+    extends: .ci:stage:exec:inspec
+    variables:
+        PROFILE: 'Apache/Httpd/2.4x/Site'
+        TARGET: 'repo.dsolab.io/baselines/apache2.4_baseline:1.1'
+    needs: ["check Apache_Httpd_2.4x_Site"]
+    
+# exec Kubernetes_Kubernetes_1.16:
+#     extends: .ci:stage:exec:inspec
+#     variables:
+#         PROFILE: 'Kubernetes/Kubernetes_1.16'
+#         TARGET: 'repo.dsolab.io/baselines/apache2.4_baseline:1.1'
+#     needs: ["check Kubernetes_Kubernetes_1.16"]
+
+exec Apache_Tomcat/9.0.37:
+    extends: .ci:stage:exec:inspec
+    variables:
+        PROFILE: 'Apache/Tomcat/9.0.37'
+        TARGET: 'repo.dsolab.io/baselines/apache2.4_baseline:1.1'
+    needs: ["check Apache_Tomcat/9.0.37"]
+
+exec MongoDB_3.6.17:
+    extends: .ci:stage:exec:inspec
+    variables:
+        PROFILE: 'MongoDB/3.6.17'
+        TARGET: 'repo.dsolab.io/baselines/apache2.4_baseline:1.1'
+    needs: ["check MongoDB_3.6.17"]
+    
+exec PostgreSQL_9.X:
+    extends: .ci:stage:exec:inspec
+    variables:
+        PROFILE: 'PostgreSQL/9.X'
+        TARGET: 'repo.dsolab.io/baselines/apache2.4_baseline:1.1'
+    needs: ["check PostgreSQL_9.X"]
