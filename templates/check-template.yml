@@ -1,0 +1,9 @@
+.ci:stage:check:inspec:
+  image:
+      name: $REGISTRY/ci/inspec:4.21.3
+      entrypoint: [""]
+  stage: check 
+  script:
+    - inspec check --chef-license accept-silent .
+  tags:
+    - docker 

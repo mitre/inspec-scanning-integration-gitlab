@@ -1,43 +1,36 @@
-# Security Scanning 
-This repository contains STIG scanning content used in conjunction with the Chef InSpec tool, Anchore or Prisma (Twistlock)
- 
-* inspec profiles
+# InSpec Scanning Integration
 
-#### Organization
-This repository is structured according to the following rules:
+This repository holds templates and dockerfiles for CI pipelines. All SCV_Content repositories build on these templates and dockerfiles.
+
+## Templates
+
+The templates are located in the `./inspec-scanning-integration/templates` directory.
+
+### Check Template
+
+The `check-template.yml` is a template that runs the `inspec check` command to verify the InSpec profile is properly formated 
+
+### Lint Template
+
+The `lint-template.yml` is a template that lints the `/controls` directory. The controls directory contains source code for evaluating STIGS.
+
+### Dependencies Template
+
+The `dependencies.yml` is a template that conolidates all templates into one file that can be imported by other projects. 
+
+## Dockerfiles
+
+The Dockerfiles are located in the `./inspec-scanning-integration/dockerfiles` directory. 
+
+### Rubocop
+
+Rubocop is an open-source project used to perform static code analysis and linting for community-driven best practices for structuring Ruby code. 
+
+Build instructions: 
+- Assumes the machine is set up with Docker. 
+- Syntax: `docker build -t <REGISTRY>/<IMAGE_NAME>[:TAG] .`.
+
 ```
-  vendor
-  -->technology 
-     --> version 
-        --> inpsec
+$ docker build -t repo.dsolab.io/ci/rubocop:v1.0 .
 ```
 
-For example:
-```
-   Apache
-      Httpd
-        2.4x
-           inspec
-      Tomcat
-        9.0.36
-           inspec
-```
-
-#### Scanner Pipeline
-This project includes a `Jenkinsfile` and  `rubocop` build artifacts that assists Jenkins in scanning the repository for InSpec profile comliance. The steps below outline the various stages that a performed.  
-
-Pipeline Steps:  
-
-1. Lint Profiles:  
-- Each profile contains multiple Ruby files within the `controls/` directory that InSpec tests against a target. Rubocop is a static code analyzer following the community Ruby Style Guide. Each profile is linted to ensure compliance with best practices.  
-
-2. InSpec profile compliance and report generation per Profile  
-- The InSpec `check` command analyzes the inspec profiles which are the `inspec/` directories in this project. This step ensures each profile is in the right format for inspec to test against a target.  
-- Conditional step on `check`:  
-   - If the `inspec check` command fails then the  `inspec exec` command will fail and produce a non-functional report for logstash. To avoid this situation happening the return status of the `inspec check` command is used to tell the pipeline if `inspec exec` should run or not.  
-
-3. Send reports to Logstash  
-- Placeholder step for when ELK is up and running in the support environment  
-
-4. Cleanup Workspace  
-- Removes generated reports.    

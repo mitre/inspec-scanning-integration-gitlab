@@ -1,0 +1,13 @@
+.ci:stage:lint:inspec:
+  image:
+      name: $REGISTRY/ci/rubocop:1.0
+      entrypoint: [""]
+  stage: lint 
+  script:
+    - /usr/local/bundle/bin/rubocop --lint $CI_PROJECT_DIR/controls > $CI_PROJECT_DIR/results.txt
+  artifacts:
+      when: always
+      paths:
+          - $CI_PROJECT_DIR/results.txt
+  tags:
+  - docker
