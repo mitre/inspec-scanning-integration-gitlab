@@ -1,1 +1,0 @@
-JRE8 content goes here

@@ -1,7 +1,0 @@
-.ci:stage:lint:inspec:
-    tags:
-      - docker
-    stage: lint 
-    script:
-      - docker login repo.dsolab.io -u admin -p $CI_PW
-      - docker run --rm -v "$CI_PROJECT_DIR/$PROFILE:/app" repo.dsolab.io/ci/rubocop:1.0 --lint .
