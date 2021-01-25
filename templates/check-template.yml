@@ -2,8 +2,10 @@
   image:
       name: $REGISTRY/ci/inspec:4.21.3
       entrypoint: [""]
+  variables:
+    CHEF_LICENSE: 'accept-silent'
   stage: check 
   script:
-    - inspec check --chef-license accept-silent .
+    - inspec check .
   tags:
     - docker 

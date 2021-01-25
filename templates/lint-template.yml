@@ -11,3 +11,4 @@
           - $CI_PROJECT_DIR/results.txt
   tags:
   - docker
+  allow_failure: true

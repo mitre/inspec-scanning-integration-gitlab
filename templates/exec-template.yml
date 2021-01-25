@@ -1,0 +1,18 @@
+.ci:stage:exec:inspec:
+  image: 
+    name: $REGISTRY/ci/inspec:4.22.0
+    entrypoint: [""]
+  services: 
+  - name: $TARGET
+    alias: 'TARGET-CONTAINER'
+  variables:
+    CHEF_LICENSE: 'accept-silent'
+    INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:report.json'
+  stage: exec
+  script:
+  - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || true
+  tags:
+  - docker
+  artifacts:
+    paths:
+    - $CI_PROJECT_DIR/report.json
