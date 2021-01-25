@@ -1,3 +1,5 @@
 include: 
   - local: templates/lint-template.yml
   - local: templates/check-template.yml
+  - local: templates/exec-template.yml
+  - local: templates/publish-template.yml

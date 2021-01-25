@@ -1,0 +1,9 @@
+.ci:stage:publish:inspec:
+  image: 
+    name: $REGISTRY/ci/aws-cli:2.1.13
+    entrypoint: [""]
+  stage: publish
+  script:
+  - aws s3 cp $CI_PROJECT_DIR/report.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}.json
+  tags:
+  - docker
