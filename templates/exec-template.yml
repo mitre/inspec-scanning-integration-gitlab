@@ -1,8 +1,8 @@
 .ci:stage:exec:inspec:
-  image: 
+  image:
     name: $REGISTRY/ci/inspec:4.22.0
     entrypoint: [""]
-  services: 
+  services:
   - name: $TARGET
     alias: 'TARGET-CONTAINER'
   variables:

@@ -31,6 +31,19 @@ Build instructions:
 - Syntax: `docker build -t <REGISTRY>/<IMAGE_NAME>[:TAG] .`.
 
 ```
-$ docker build -t repo.dsolab.io/ci/rubocop:v1.0 .
+$ cd inspec_scanning-integration/dockerfiles/rubocop
+$ docker build -t repo.dsolab.io/ci/rubocop:v0.88 .
 ```
 
+### Cookstyle 
+
+Rubocop is a project created by Chef.io and is used to validate Chef generated artifacts 
+
+Build instructions: 
+- Assumes the machine is set up with Docker. 
+- Syntax: `docker build -t <REGISTRY>/<IMAGE_NAME>[:TAG] .`.
+
+```
+$ cd inspec_scanning-integration/dockerfiles/cookstyle
+$ docker build -t repo.dsolab.io/ci/cookstyle:7.7.2 .
+```

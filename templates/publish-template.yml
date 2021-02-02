@@ -1,5 +1,5 @@
 .ci:stage:publish:inspec:
-  image: 
+  image:
     name: $REGISTRY/ci/aws-cli:2.1.13
     entrypoint: [""]
   stage: publish
