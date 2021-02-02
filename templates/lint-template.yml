@@ -10,6 +10,7 @@
       when: always
       paths:
           - $CI_PROJECT_DIR/linting-results.json
+          - $CI_PROJECT_DIR/checking-results.json
   tags:
   - docker
   allow_failure: true
