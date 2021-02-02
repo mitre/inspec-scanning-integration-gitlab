@@ -6,6 +6,7 @@
     CHEF_LICENSE: 'accept-silent'
   stage: check 
   script:
-    - inspec check .
+    - inspec check --format=json > check-report.json
+    - aws s3 cp $CI_PROJECT_DIR/check-report.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-check-report.json
   tags:
     - docker 
