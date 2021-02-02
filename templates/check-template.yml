@@ -6,6 +6,6 @@
     CHEF_LICENSE: 'accept-silent'
   stage: check 
   script:
-    - inspec check . --format=json > check-report.json
+    - inspec check . --format=json > checking-results.json
   tags:
     - docker 
