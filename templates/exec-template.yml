@@ -17,3 +17,5 @@
   artifacts:
     paths:
     - $CI_PROJECT_DIR/report.json
+    - $CI_PROJECT_DIR/linting-results.json
+    - $CI_PROJECT_DIR/checking-results.json
