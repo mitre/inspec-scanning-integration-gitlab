@@ -7,5 +7,10 @@
   stage: check 
   script:
     - inspec check . --format=json > checking-results.json
+  artifacts:
+    when: always
+    paths:
+        - $CI_PROJECT_DIR/checking-results.json
+
   tags:
     - docker 
