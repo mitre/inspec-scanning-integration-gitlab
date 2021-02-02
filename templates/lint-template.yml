@@ -5,6 +5,7 @@
   stage: lint
   script:
     - /usr/local/bundle/bin/cookstyle $CI_PROJECT_DIR/controls -f j -o $CI_PROJECT_DIR/linting-results.json
+  allow_failure: true
   artifacts:
       when: always
       paths:
