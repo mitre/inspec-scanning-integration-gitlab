@@ -11,7 +11,7 @@
   stage: exec
   script:
   - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || true
-  allow_failure: true 
+ # allow_failure: true 
   tags:
   - docker
   artifacts:
