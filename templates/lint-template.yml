@@ -14,4 +14,3 @@
           - $CI_PROJECT_DIR/checking-results.json
   tags:
   - docker
-  allow_failure: true
