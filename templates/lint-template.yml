@@ -4,7 +4,7 @@
       entrypoint: [""]
   stage: lint
   script:
-    - rm -f rubocop.yml 2> /dev/null
+    - rm -f .rubocop.yml 2> /dev/null
     - /usr/local/bundle/bin/cookstyle $CI_PROJECT_DIR/controls -f j -o $CI_PROJECT_DIR/linting-results.json
   allow_failure: true
   artifacts:
