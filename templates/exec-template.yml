@@ -10,7 +10,9 @@
     INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:report.json'
   stage: exec
   script:
+    # This is just a placeholder container until The Exec stage is fleshed out in coming weeks.
     - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || true
+    # Command that triggers a failure.
     - ekk "test" 
   
   allow_failure: true 
