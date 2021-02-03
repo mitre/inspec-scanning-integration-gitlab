@@ -12,6 +12,5 @@
     when: always
     paths:
         - $CI_PROJECT_DIR/checking-results.json
-
   tags:
     - docker 
