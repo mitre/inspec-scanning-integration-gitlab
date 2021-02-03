@@ -6,6 +6,6 @@
   script:
   - aws s3 cp $CI_PROJECT_DIR/checking-results.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-checking-results.json
   - aws s3 cp $CI_PROJECT_DIR/linting-results.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-linting-results.json  
- # - aws s3 cp $CI_PROJECT_DIR/report.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}.json
+  - aws s3 cp $CI_PROJECT_DIR/report.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-exec-results.json
   tags:
   - docker
