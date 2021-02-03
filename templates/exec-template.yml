@@ -10,7 +10,7 @@
     INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:report.json'
   stage: exec
   script:
-    - echk 
+    - echo "test" 
   #- inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || true
   allow_failure: true 
   tags:
