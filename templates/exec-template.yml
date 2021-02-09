@@ -11,7 +11,8 @@
   stage: exec
   script:
     # This is just a placeholder container until The Exec stage is fleshed out in coming weeks.
-    - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS
+    - echo $TARGET_CONTAINER_NAME
+    # - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS
   rules:
     - if: '$TARGET_CONTAINER_NAME != ""'
   allow_failure: true 
