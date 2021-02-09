@@ -14,7 +14,7 @@
     - echo $TARGET_CONTAINER_NAME
     # - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS
   rules:
-    - if: '$TARGET_CONTAINER_NAME != ""'
+    - if: '$TARGET_CONTAINER_NAME != "rep.dsolab.io/baselines/hello-world:latest"'
   allow_failure: true 
   tags:
   - docker
