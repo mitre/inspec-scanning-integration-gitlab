@@ -12,7 +12,7 @@
   script:
     # This is just a placeholder container until The Exec stage is fleshed out in coming weeks.
     - echo $TARGET_CONTAINER_NAME
-    # - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS
+    - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS
   rules:
     - if: '$TARGET_CONTAINER_NAME != "rep.dsolab.io/baselines/hello-world:latest"'
   allow_failure: true 
