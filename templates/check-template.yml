@@ -6,6 +6,11 @@
     CHEF_LICENSE: 'accept-silent'
   stage: check 
   script:
-    - inspec check .
+    - inspec check . --format=json > checking-results.json
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+        - $CI_PROJECT_DIR/checking-results.json
   tags:
     - docker 

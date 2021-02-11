@@ -4,11 +4,13 @@
       entrypoint: [""]
   stage: lint
   script:
+    - rm -f .rubocop.yml 2> /dev/null
     - /usr/local/bundle/bin/cookstyle $CI_PROJECT_DIR/controls -f j -o $CI_PROJECT_DIR/linting-results.json
+  allow_failure: true
   artifacts:
       when: always
       paths:
           - $CI_PROJECT_DIR/linting-results.json
+          - $CI_PROJECT_DIR/checking-results.json
   tags:
   - docker
-  allow_failure: true
