@@ -1,17 +1,24 @@
 .ci:stage:exec:inspec:
   image:
-    name: $REGISTRY/ci/inspec:4.22.0
+    name: rep.dsolab.io:5004/docker:19.03.12
     entrypoint: [""]
+  
   services:
-  - name: $TARGET
-    alias: 'TARGET-CONTAINER'
+  - rep.dsolab.io:5004/docker:19.03.12-dind
+
   variables:
     CHEF_LICENSE: 'accept-silent'
     INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:report.json'
   stage: exec
   script:
-    # This is just a placeholder container until The Exec stage is fleshed out in coming weeks.
-    - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || false
+     # Docker Login to rep.dsolab.io
+     - docker login rep.dsolab.io:5003 -u 'admin' -p "${CW_PW2}"
+     # This is just a placeholder container until The Exec stage is fleshed out in coming weeks.
+     - docker run $TARGET_CONTAINER_NAME
+     # Value of $INSPEC_NAME should be derived from this $REGISTRY/ci/inspec:4.22.0
+     - docker run $INSPEC_IMAGE
+     # Eventually it will need to be "docker run $INSPEC_IMAGE inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS"
+     #- inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || false
   allow_failure: true 
   tags:
   - docker
