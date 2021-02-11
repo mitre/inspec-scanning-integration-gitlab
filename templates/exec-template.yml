@@ -16,7 +16,7 @@
      # This is just a placeholder container until The Exec stage is fleshed out in coming weeks.
      - docker run --name inspec_target_$CI_PIPELINE_ID $TARGET_CONTAINER_NAME 
      # Value of $INSPEC_NAME should be derived from this $REGISTRY/ci/inspec:4.22.0
-     - docker run --name inspec_scanner_$CI_PIPELINE_ID $INSPEC_IMAGE --link inspec_target_$CI_PIPELINE_ID:$TARGET_CONTAINER_NAME
+     - docker run --name inspec_scanner_$CI_PIPELINE_ID --link inspec_target_$CI_PIPELINE_ID:$TARGET_CONTAINER_NAME $INSPEC_IMAGE
      # Eventually it will need to be "docker run $INSPEC_IMAGE inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS"
      #- inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || false
   allow_failure: true 
