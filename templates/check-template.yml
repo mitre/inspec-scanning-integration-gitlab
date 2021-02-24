@@ -4,13 +4,14 @@
       entrypoint: [""]
   variables:
     CHEF_LICENSE: 'accept-silent'
-  stage: check 
+  stage: check
   script:
-    - inspec check . --format=json > checking-results.json
+    - mkdir reports
+    - inspec check . --format=json > reports/checking-results.json
   allow_failure: true
   artifacts:
     when: always
     paths:
-        - $CI_PROJECT_DIR/checking-results.json
+        - $CI_PROJECT_DIR/reports/checking-results.json
   tags:
-    - docker 
+    - docker

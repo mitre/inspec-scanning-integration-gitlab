@@ -1,0 +1,26 @@
+.ci:stage:publish:inspec:sync:
+  image:
+    name: $REGISTRY/ci/sync:1.0.0
+    entrypoint: [""]
+  stage: publish
+  variables:
+    SYNC_REPO: 'PLACEHOLDER'
+    SYNC_TOKEN: 'PLACEHOLDER'
+  when: manual
+  script:
+    - echo "Beginning Sync Process..."
+    - git clone https://$SYNC_REPO sync_repo
+    - cd sync_repo
+    - git checkout -b Release-v$CI_COMMIT_TAG
+    - echo "Repo1 branch will be synced to Master with the removal of .gitlab-ci.yml and additional items."
+    - rsync -a --delete $CI_PROJECT_DIR/* . --exclude .gitlab-ci.yml --exclude reports --exclude sync_repo
+    - git add . && git commit -m "Pushing latest release - $CI_COMMIT_TAG"
+    - export UPSTREAM="https://oath2:$SYNC_TOKEN@$SYNC_REPO"
+    - git push --force --set-upstream $UPSTREAM Release-v$CI_COMMIT_TAG
+    - echo "Sync complete."
+  allow_failure: true
+  only:
+    refs:
+      - tags
+  tags:
+  - docker
