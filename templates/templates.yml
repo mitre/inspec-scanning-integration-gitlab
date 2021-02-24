@@ -2,5 +2,5 @@ include:
   - local: templates/lint-template.yml
   - local: templates/check-template.yml
   - local: templates/exec-template.yml
-  - local: templates/publish-artifacts.yml
-  - local: templates/publish-sync.yml
+  - local: templates/publish-artifacts-template.yml
+  - local: templates/publish-sync-template.yml
