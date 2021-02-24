@@ -1,16 +1,16 @@
 .ci:stage:lint:inspec:
   image:
-      name: $REGISTRY/ci/cookstyle:7.7.2
-      entrypoint: [""]
+    name: $REGISTRY/ci/cookstyle:7.7.2
+    entrypoint: [""]
   stage: lint
   script:
     - rm -f .rubocop.yml 2> /dev/null
-    - /usr/local/bundle/bin/cookstyle $CI_PROJECT_DIR/controls -f j -o $CI_PROJECT_DIR/linting-results.json
+    - /usr/local/bundle/bin/cookstyle $CI_PROJECT_DIR/controls/* -f j -o $CI_PROJECT_DIR/linting-results.json
   allow_failure: true
   artifacts:
-      when: always
-      paths:
-          - $CI_PROJECT_DIR/linting-results.json
-          - $CI_PROJECT_DIR/checking-results.json
+    when: always
+    paths:
+      - $CI_PROJECT_DIR/checking-results.json
+      - $CI_PROJECT_DIR/linting-results.json
   tags:
-  - docker
+    - docker
