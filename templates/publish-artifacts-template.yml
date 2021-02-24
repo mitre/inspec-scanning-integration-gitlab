@@ -1,0 +1,11 @@
+.ci:stage:publish:inspec:artifacts:
+  image:
+    name: $REGISTRY/ci/aws-cli:2.1.13
+    entrypoint: [""]
+  stage: publish
+  script:
+  - aws s3 cp $CI_PROJECT_DIR/reports/checking-results.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-checking-results.json
+  - aws s3 cp $CI_PROJECT_DIR/reports/linting-results.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-linting-results.json
+  allow_failure: true
+  tags:
+  - docker
