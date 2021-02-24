@@ -7,17 +7,14 @@
     alias: 'TARGET-CONTAINER'
   variables:
     CHEF_LICENSE: 'accept-silent'
-    INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:report.json'
+    INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:reports/exec-results.json'
   stage: exec
   script:
-    # This is just a placeholder container until The Exec stage is fleshed out in coming weeks.
-    - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || false
-  allow_failure: true 
+    - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || true
+  allow_failure: true
   tags:
   - docker
   artifacts:
     when: always
     paths:
-    - $CI_PROJECT_DIR/linting-results.json
-    - $CI_PROJECT_DIR/checking-results.json
-    - $CI_PROJECT_DIR/report.json
+    - $CI_PROJECT_DIR/reports/exec-results.json
