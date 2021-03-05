@@ -1,17 +1,34 @@
 .ci:stage:exec:inspec:
   image:
-    name: $REGISTRY/ci/inspec:4.22.0
+    name: $REGISTRY/ci/inspec-dev:$INSPEC_TAG
     entrypoint: [""]
   services:
-  - name: $TARGET
-    alias: 'TARGET-CONTAINER'
+    - $TARGET
   variables:
     CHEF_LICENSE: 'accept-silent'
     INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:reports/exec-results.json'
   stage: exec
   script:
-    - inspec exec $CI_PROJECT_DIR -t docker:/$TARGET_CONTAINER_NAME $INSPEC_REPORT_PARAMS || true
-  allow_failure: true
+    # Grabbing the Container ID for the newly created target container.
+    - TARGET_CONTAINER_ID=$(docker ps --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.ID}})
+
+    # Verifying that the Container ID variable has value. If not, exit the pipeline.
+    - if [ -n "$TARGET_CONTAINER_ID" ]; then 
+        echo "Container ID of TARGET - $TARGET_CONTAINER_ID"; 
+      else 
+        echo "COULD NOT FIND CONTAINER ID. EXITING..." && exit 1; 
+      fi
+    
+    # Echoing out the Inspec version for this run.
+    - echo "Using Inspec Version - $(inspec version)"
+
+    # Determining if the profile requires additional inputs. Running inspec exec in accordance.
+    - if [ -n "$INSPEC_INPUTS" ]; then 
+        echo "Project requires inputs from - $INSPEC_INPUTS" && inspec exec $CI_PROJECT_DIR -t docker://$TARGET_CONTAINER_ID $INSPEC_REPORT_PARAMS --input-file $INSPEC_INPUTS || false; 
+      else 
+        echo "Project DOES NOT require additional inputs." && inspec exec $CI_PROJECT_DIR -t docker://$TARGET_CONTAINER_ID $INSPEC_REPORT_PARAMS || false; 
+      fi
+  allow_failure: true 
   tags:
   - docker
   artifacts:
