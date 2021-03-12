@@ -1,15 +1,17 @@
 .ci:stage:lint:inspec:
   image:
-    name: $REGISTRY/ci/cookstyle:7.7.2
+    name: $REGISTRY/ci/cook-dev:$INSPEC_PIPELINE_TAG
     entrypoint: [""]
   stage: lint
+  before_script:
+    - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
-    - rm -f .rubocop.yml 2> /dev/null
-    - /usr/local/bundle/bin/cookstyle $CI_PROJECT_DIR/controls/* -f j -o $CI_PROJECT_DIR/reports/linting-results.json
+    - cookstyle  --force-default-config $CI_PROJECT_DIR/controls/* -f j -o $CI_PROJECT_DIR/reports/linting-results.json || true
+    - writer reports/linting-results.json reports/public-lint-results.json
   allow_failure: true
   artifacts:
       when: always
       paths:
-          - $CI_PROJECT_DIR/reports/linting-results.json
+          - $CI_PROJECT_DIR/reports/public-lint-results.json
   tags:
   - docker

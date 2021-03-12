@@ -9,7 +9,7 @@
   when: manual
   script:
     - echo "Beginning Sync Process..."
-    - git clone https://$SYNC_REPO sync_repo
+    - git clone https://oauth2:$SYNC_TOKEN@$SYNC_REPO sync_repo
     - cd sync_repo
     - git checkout -b Release-v$CI_COMMIT_TAG
     - echo "Repo1 branch will be synced to Master with the removal of .gitlab-ci.yml and additional items."
