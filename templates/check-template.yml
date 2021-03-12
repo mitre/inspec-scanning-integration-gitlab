@@ -1,17 +1,20 @@
 .ci:stage:check:inspec:
   image:
-      name: $REGISTRY/ci/inspec:4.21.3
+      name: $REGISTRY/ci/inspec-dev:$INSPEC_PIPELINE_TAG
       entrypoint: [""]
   variables:
     CHEF_LICENSE: 'accept-silent'
   stage: check
+  before_script:
+    - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
     - mkdir reports
     - inspec check . --format=json > reports/checking-results.json
+    - writer $CI_PROJECT_DIR/reports/checking-results.json $CI_PROJECT_DIR/reports/public-check-results.json
   allow_failure: true
   artifacts:
     when: always
     paths:
-        - $CI_PROJECT_DIR/reports/checking-results.json
+        - $CI_PROJECT_DIR/reports/public-check-results.json
   tags:
     - docker

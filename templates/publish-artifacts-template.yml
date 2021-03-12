@@ -1,12 +1,11 @@
 .ci:stage:publish:inspec:artifacts:
   image:
-    name: $REGISTRY/ci/aws-cli:2.1.13
+    name: $REGISTRY/ci/curl:7.75.0
     entrypoint: [""]
-  stage: publish
+  stage: report
   script:
-  - aws s3 cp $CI_PROJECT_DIR/reports/checking-results.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-checking-results.json
-  - aws s3 cp $CI_PROJECT_DIR/reports/linting-results.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-linting-results.json
-  - aws s3 cp $CI_PROJECT_DIR/reports/exec-results.json s3://${BUCKET_NAME}/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}-exec-results.json
+    - tar -czvf archive.tar.gz reports/
+    - 'curl -L -X POST "${DASH_API}" -H "x-api-key: ${DASH_API_KEY}" -H "Content-Type: application/gzip" -H "pipeline-id: $CI_PIPELINE_ID" -H "gitlab-project-dir: $CI_PROJECT_DIR" --data-binary "@archive.tar.gz"'
   allow_failure: true
   tags:
-  - docker
+    - docker
