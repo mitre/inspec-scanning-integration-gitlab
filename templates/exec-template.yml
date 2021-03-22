@@ -2,8 +2,6 @@
   image:
     name: $REGISTRY/ci/inspec-dev:$INSPEC_PIPELINE_TAG
     entrypoint: [""]
-  services:
-    - $TARGET
   variables:
     CHEF_LICENSE: 'accept-silent'
     INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:reports/exec-results.json'
@@ -11,6 +9,13 @@
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
+    # Running Target image and checking for additional Docker inputs via .gitlab-ci.yml variable: DOCKER_INPUTS.
+    - if [ -n "$DOCKER_INPUTS" ]; then
+        echo "Target image requires additional runtime inputs." && docker run -d --name $(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1) $DOCKER_INPUTS $TARGET;
+      else
+        echo "Target image DOES NOT require additional runtime inputs" && docker run -d --name $(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1) $TARGET;
+      fi
+    
     # Grabbing the Container ID for the newly created target container.
     - TARGET_CONTAINER_ID=$(docker ps --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.ID}})
 
@@ -31,6 +36,9 @@
         echo "Project DOES NOT require additional inputs." && inspec exec $CI_PROJECT_DIR -t docker://$TARGET_CONTAINER_ID $INSPEC_REPORT_PARAMS || true;
       fi
 
+    # Removing scanned container.
+    - docker stop $TARGET_CONTAINER_ID && docker rm $TARGET_CONTAINER_ID
+    
     # Parse JSON files and produce summary file.
     - writer reports/exec-results.json reports/public-exec-results.json
   allow_failure: true
