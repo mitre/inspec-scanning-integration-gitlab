@@ -4,8 +4,8 @@
     entrypoint: [""]
   variables:
     CHEF_LICENSE: 'accept-silent'
-    INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:reports/exec-results.json'
-  stage: exec
+    INSPEC_REPORT_PARAMS: '--show-progress --reporter cli json:reports/raw/exec-results.json'
+  stage: verify
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
@@ -26,6 +26,38 @@
         echo "COULD NOT FIND CONTAINER ID. EXITING..." && exit 1;
       fi
 
+    # Finding container status and saving to variable.
+    - strStatus=$(docker ps --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.Status}} | awk '{print $NF}' | tr -d '()')
+
+    # Querying container status, break when container reports 'healthy'.
+    - >
+        while [ -n "$strStatus" ]; do
+          if [[ $strStatus != $strPrevStatus ]]; then
+            case "$strStatus" in
+              healthy)
+                echo -e "\nContainer is reporting healthy. Moving on with Inspec scan."
+                break 3
+                ;;
+              unhealthy)
+                echo -e "\nContainer has started but is not in a healthy state..."
+                ;;
+              starting)
+                echo -e "\nContainer is starting..."
+                ;;
+              *)
+                if [[ -n $(docker ps -a --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.Status}} | grep -i Exited) ]]; then
+                  echo -e "\nContainer is not running and has errored. Current status lists - Exited. Please check configuration."
+                else
+                  echo -e "\nContainer is Up. Moving on with Inspec scan."
+                fi
+                break 3
+                ;;
+            esac
+          fi
+          strPrevStatus=$strStatus
+          strStatus=$(docker ps --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.Status}} | awk '{print $NF}' | tr -d '()')
+        done
+
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
 
@@ -40,12 +72,14 @@
     - docker stop $TARGET_CONTAINER_ID && docker rm $TARGET_CONTAINER_ID
     
     # Parse JSON files and produce summary file.
-    - writer reports/exec-results.json reports/public-exec-results.json
+    - writer reports/raw/exec-results.json reports/pipeline/exec-results.json
+    - inspec_tools summary -j reports/raw/exec-results.json -f > reports/raw/exec-summary.json
   allow_failure: true
   tags:
   - docker
   artifacts:
     when: always
     paths:
-    - $CI_PROJECT_DIR/reports/exec-results.json
-    - $CI_PROJECT_DIR/reports/public-exec-results.json
+    - $CI_PROJECT_DIR/reports/raw/exec-results.json
+    - $CI_PROJECT_DIR/reports/raw/exec-summary.json
+    - $CI_PROJECT_DIR/reports/pipeline/exec-results.json
