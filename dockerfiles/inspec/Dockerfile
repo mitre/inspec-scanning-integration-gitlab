@@ -20,12 +20,15 @@ ENV LANG=en_US.UTF-8 \
 RUN mkdir -p /share
 
 RUN apt-get update && \
-	apt-get install -y wget rpm2cpio cpio libssl1.0.0 libssl-dev && \
-	ln -s libssl.so.1.0.0 libssl.so.10 && \
+    apt-get install -y wget rpm2cpio cpio libssl1.0.0 libssl-dev ruby && \
+    ln -s libssl.so.1.0.0 libssl.so.10 && \
     ln -s libcrypto.so.1.0.0 libcrypto.so.10 && \
     wget "http://packages.chef.io/files/${CHANNEL}/inspec/${VERSION}/el/7/inspec-${VERSION}-1.el7.x86_64.rpm" -O /tmp/inspec.rpm && \
     rpm2cpio /tmp/inspec.rpm | cpio -idmv && \
     rm -rf /tmp/inspec.rpm
+
+RUN gem sources --add https://rep.dsolab.io/repository/dso-gems/ && \
+    gem install sd_cac_tools -v 2.2.1.4.g1ba2533
 
 RUN apt install -y apt-transport-https ca-certificates curl software-properties-common && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \

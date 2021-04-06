@@ -2,16 +2,17 @@
   image:
     name: $REGISTRY/ci/cook-dev:$INSPEC_PIPELINE_TAG
     entrypoint: [""]
-  stage: lint
+  stage: verify
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
-    - cookstyle  --force-default-config $CI_PROJECT_DIR/controls/* -f j -o $CI_PROJECT_DIR/reports/linting-results.json || true
-    - writer reports/linting-results.json reports/public-lint-results.json
+    - cookstyle  --force-default-config $CI_PROJECT_DIR/controls/* -f j -o $CI_PROJECT_DIR/reports/raw/lint-results.json || true
+    - writer reports/raw/lint-results.json reports/pipeline/lint-results.json
   allow_failure: true
   artifacts:
       when: always
       paths:
-          - $CI_PROJECT_DIR/reports/public-lint-results.json
+          - $CI_PROJECT_DIR/reports/raw/lint-results.json
+          - $CI_PROJECT_DIR/reports/pipeline/lint-results.json
   tags:
   - docker

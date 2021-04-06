@@ -4,3 +4,4 @@ include:
   - local: templates/exec-template.yml
   - local: templates/publish-artifacts-template.yml
   - local: templates/publish-sync-template.yml
+  - local: templates/setup-template.yml

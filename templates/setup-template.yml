@@ -1,0 +1,14 @@
+.ci:stage:setup:inspec:
+  image:
+    name: $REGISTRY/ci/inspec-dev:$INSPEC_PIPELINE_TAG
+    entrypoint: [""]
+  stage: setup
+  script:
+    - mkdir -p reports/{raw,pipeline}
+  artifacts:
+    when: always
+    paths:
+        - $CI_PROJECT_DIR/reports/raw/
+        - $CI_PROJECT_DIR/reports/pipeline/
+  tags:
+    - docker
