@@ -8,7 +8,7 @@ download_artifacts:
     entrypoint: [""]
   stage: download
   script:
-    - 'curl -sSL https://rep.dsolab.io/repository/raw-hosted/pipeline_writer/0.2.5/writer -o writer'
+    - 'curl -sSL https://rep.dsolab.io/repository/raw-hosted/pipeline_writer/0.2.6/writer -o writer'
   artifacts:
     when: always
     paths:
