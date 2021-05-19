@@ -8,6 +8,7 @@
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
+    - inspec vendor .
     - inspec check . --format=json > reports/raw/check-results.json
     - writer $CI_PROJECT_DIR/reports/raw/check-results.json $CI_PROJECT_DIR/reports/pipeline/check-results.json
   allow_failure: true
