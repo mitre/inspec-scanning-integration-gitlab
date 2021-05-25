@@ -8,7 +8,11 @@
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
-    - inspec vendor .
+    - if [ "${INSPEC_VENDOR,,}" == 'true' ] && [ "${GIT_CREDS,,}" == 'false' ] || [ $GIT_CREDS == '' ]; then
+        echo "Check requires dependencies via Inspec Vendor command." && inspec vendor .;
+      elif [ "${INSPEC_VENDOR,,}" == 'true' ] && [ "${GIT_CREDS,,}" == 'true' ]; then
+        echo "Check requires dependencies via Inspec Vendor command along with additional Git credentials." && echo "https://$GIT_USER:$GIT_TOKEN@gitlab.dsolab.io" >> $CI_PROJECT_DIR/.git.creds && git config --global credential.helper 'store --file $CI_PROJECT_DIR/.git.creds' && inspec vendor .;
+      fi
     - inspec check . --format=json > reports/raw/check-results.json
     - writer $CI_PROJECT_DIR/reports/raw/check-results.json $CI_PROJECT_DIR/reports/pipeline/check-results.json
   allow_failure: true
