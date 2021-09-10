@@ -87,7 +87,7 @@
         done
       fi
 
-  allow_failure: true
+  allow_failure: false
   tags:
   - sandbox
   artifacts:
