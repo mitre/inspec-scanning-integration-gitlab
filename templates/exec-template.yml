@@ -58,6 +58,11 @@
           strStatus=$(docker ps --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.Status}} | awk '{print $NF}' | tr -d '()')
         done
 
+    # Determining if additional Docker container information or commands are needed
+    - if [ -n "$COMMANDS" ]; then
+        echo "Running additional commands against docker container." && docker exec -i $TARGET_CONTAINER_ID $COMMANDS
+      fi
+      
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
 
