@@ -60,9 +60,9 @@
 
     # Determining if additional Docker container information or commands are needed
     - if [ -n "$COMMANDS" ]; then
-        echo "Running additional commands against docker container." && docker exec -i $TARGET_CONTAINER_ID $COMMANDS
+        echo "Running additional commands against docker container." && docker exec -i $TARGET_CONTAINER_ID $COMMANDS;
       fi
-      
+
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
 
