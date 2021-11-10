@@ -60,7 +60,7 @@
 
     # Determining if additional Docker container information or commands are needed
     - if [ -n "$COMMANDS" ]; then
-        echo "Running additional commands against docker container." && docker exec -i $TARGET_CONTAINER_ID $COMMANDS;
+        echo "Running additional commands against docker container." && docker exec -i $TARGET_CONTAINER_ID $COMMANDS > $CI_PROJECT_DIR/reports/raw/container-commands.txt && cat $CI_PROJECT_DIR/reports/raw/container-commands.txt;
       fi
 
     # Echoing out the Inspec version for this run.
@@ -85,6 +85,7 @@
   artifacts:
     when: always
     paths:
+    - $CI_PROJECT_DIR/reports/raw/container-commands.txt
     - $CI_PROJECT_DIR/reports/raw/exec-results.json
     - $CI_PROJECT_DIR/reports/raw/exec-summary.json
     - $CI_PROJECT_DIR/reports/pipeline/exec-results.json
