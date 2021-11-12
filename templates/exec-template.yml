@@ -63,6 +63,12 @@
         echo "Running additional commands against docker container." && echo $COMMANDS > $CI_PROJECT_DIR/commands.txt && docker exec -i $TARGET_CONTAINER_ID bash < $CI_PROJECT_DIR/commands.txt > $CI_PROJECT_DIR/reports/raw/commands-output.txt && cat $CI_PROJECT_DIR/reports/raw/commands-output.txt && rm -rf $CI_PROJECT_DIR/commands.txt;
       fi
 
+    # Determining if controls contain sudo command
+    - SUDOCHECK=$(grep 'command("sudo' $CI_PROJECT_DIR/controls/*)
+    - if [ -n $SUDOCHECK ]; then
+        echo "WARNING! - SUDO command is being utilized in this profile. Please check commands-output.txt for more details." && echo $SUDOCHECK >> $CI_PROJECT_DIR/reports/raw/commands-output.txt;
+      fi
+      
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
 
