@@ -66,7 +66,7 @@
     # Determining if controls contain sudo command
     - SUDOCHECK=$(grep 'command("sudo' $CI_PROJECT_DIR/controls/*)
     - if [ -n "$SUDOCHECK" ]; then
-        echo "WARNING! - SUDO command is being utilized in this profile. Please check commands-output.txt for more details." && echo "$SUDOCHECK" >> $CI_PROJECT_DIR/reports/raw/commands-output.txt;
+        echo "WARNING! - SUDO command is being utilized in this profile. Please check commands-output.txt for more details." && echo "$SUDOCHECK" >> $CI_PROJECT_DIR/reports/raw/commands-output.txt && echo "Checks effected:" && echo "$SUDOCHECK";
       fi
 
     # Echoing out the Inspec version for this run.
