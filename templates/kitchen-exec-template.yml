@@ -9,13 +9,14 @@
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
     # Set region for AWS calls
-    # - export AWS_DEFAULT_REGION=us-gov-west-1
+    - export AWS_DEFAULT_REGION=us-gov-west-1
 
     # Currently the pipeline setup injects AWS creds used in other executions
     # However on the Sandbox runner the IAM Instance profile creds has used.
     # unsetting the pipeline creds to use IAM Instance profile creds 
     - unset AWS_SECRET_ACCESS_KEY
     - unset AWS_ACCESS_KEY_ID
+
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
 
@@ -28,17 +29,24 @@
 
     # Create user data script content to upload the ssh pub key to test instance
     - ruby /opt/prepare_user_data.rb /opt/user_data.sh.erb ./ssh_key.pub user_data.sh
-    # install dependencies for kitchen from the repository
-    - bundle install;
+    - pwd 
+    - ls -lah
+    - bundle install
     # Run kitchen info/steps individually and verbosely if DEBUG is set to true
     - if [ "$DEBUG" = 'true' ]; then
-        bundle exec kitchen list;
-        bundle exec kitchen create;
+        kitchen diagnose;
+        kitchen list;
+        # kitchen destroy -l debug || true;
+        # kitchen create -l debug || true;
+        # kitchen converge -l debug || true;
+        # kitchen setup -l debug || true;
+        # kitchen verify -l debug || true;
+        # kitchen destroy -l debug || true;
       else
-        bundle exec kitchen test --destroy=always || true;
+        kitchen test --destroy=always || true;
       fi
     # Run destroy again to capture any stragglers
-    - bundle exec kitchen destroy;
+    - kitchen destroy 
 
     # Tally up generated results
     - vanilla_results=($CI_PROJECT_DIR/reports/raw/vanilla/*)
