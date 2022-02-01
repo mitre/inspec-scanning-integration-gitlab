@@ -10,7 +10,6 @@
   script:
     # Set region for AWS calls
     - export AWS_DEFAULT_REGION=us-gov-west-1
-    - aws ec2 describe-images --owners 309956199498 --query 'sort_by(Images, &CreationDate)[*].[CreationDate,Name,ImageId]' --filters "Name=name,Values=RHEL-7.?*GA*" --region us-gov-west-1 --output table
 
     # Currently the pipeline setup injects AWS creds used in other executions
     # However on the Sandbox runner the IAM Instance profile creds has used.
