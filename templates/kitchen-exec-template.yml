@@ -34,7 +34,7 @@
     # Run kitchen info/steps individually and verbosely if DEBUG is set to true
     - if [ "$DEBUG" = 'true' ]; then
         bundle exec kitchen list;
-        bundle exec kitchen create --destroy=always;
+        bundle exec kitchen create;
       else
         bundle exec kitchen test --destroy=always || true;
       fi
