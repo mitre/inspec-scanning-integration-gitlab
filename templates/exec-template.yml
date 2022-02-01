@@ -10,25 +10,21 @@
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
     # Running Target image and checking for additional Docker inputs via .gitlab-ci.yml variable: DOCKER_INPUTS.
-    - >
-        if [ -n "$DOCKER_INPUTS" ]; then
-          echo "Target image requires additional runtime inputs."
-          docker run -d --name $(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1) $DOCKER_INPUTS $TARGET;
-        else
-          echo "Target image DOES NOT require additional runtime inputs"
-          docker run -d --name $(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1) $TARGET;
-        fi
+    - if [ -n "$DOCKER_INPUTS" ]; then
+        echo "Target image requires additional runtime inputs." && docker run -d --name $(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1) $DOCKER_INPUTS $TARGET;
+      else
+        echo "Target image DOES NOT require additional runtime inputs" && docker run -d --name $(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1) $TARGET;
+      fi
     
     # Grabbing the Container ID for the newly created target container.
     - TARGET_CONTAINER_ID=$(docker ps --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.ID}})
 
     # Verifying that the Container ID variable has value. If not, exit the pipeline.
-    - >
-        if [ -n "$TARGET_CONTAINER_ID" ]; then
-          echo "Container ID of TARGET - $TARGET_CONTAINER_ID";
-        else
-          echo "COULD NOT FIND CONTAINER ID. EXITING..." && exit 1;
-        fi
+    - if [ -n "$TARGET_CONTAINER_ID" ]; then
+        echo "Container ID of TARGET - $TARGET_CONTAINER_ID";
+      else
+        echo "COULD NOT FIND CONTAINER ID. EXITING..." && exit 1;
+      fi
 
     # Finding container status and saving to variable.
     - strStatus=$(docker ps --filter "name=$(echo $TARGET | cut -d "/" -f 3 | cut -d ":" -f 1)" --format {{.Status}} | awk '{print $NF}' | tr -d '()')
@@ -63,41 +59,29 @@
         done
 
     # Determining if additional Docker container information or commands are needed
-    - >
-        if [ -n "$COMMANDS" ]; then
-          echo "Running additional commands against docker container."
-          echo $COMMANDS > $CI_PROJECT_DIR/commands.txt
-          docker exec -i $TARGET_CONTAINER_ID bash < $CI_PROJECT_DIR/commands.txt > $CI_PROJECT_DIR/reports/raw/commands-output.txt
-          cat $CI_PROJECT_DIR/reports/raw/commands-output.txt
-          rm -rf $CI_PROJECT_DIR/commands.txt;
-        fi
+    - if [ -n "$COMMANDS" ]; then
+        echo "Running additional commands against docker container." && echo $COMMANDS > $CI_PROJECT_DIR/commands.txt && docker exec -i $TARGET_CONTAINER_ID bash < $CI_PROJECT_DIR/commands.txt > $CI_PROJECT_DIR/reports/raw/commands-output.txt && cat $CI_PROJECT_DIR/reports/raw/commands-output.txt && rm -rf $CI_PROJECT_DIR/commands.txt;
+      fi
 
     # Determining if controls contain sudo command
     - SUDOCHECK=$(grep 'command("sudo' $CI_PROJECT_DIR/controls/*)
-    - >
-        if [ -n "$SUDOCHECK" ]; then
-          echo "WARNING! - SUDO command is being utilized in this profile. Please check commands-output.txt for more details."
-          echo "$SUDOCHECK" >> $CI_PROJECT_DIR/reports/raw/commands-output.txt
-          echo "Checks effected:"
-          echo "$SUDOCHECK";
-        fi
+    - if [ -n "$SUDOCHECK" ]; then
+        echo "WARNING! - SUDO command is being utilized in this profile. Please check commands-output.txt for more details." && echo "$SUDOCHECK" >> $CI_PROJECT_DIR/reports/raw/commands-output.txt && echo "Checks effected:" && echo "$SUDOCHECK";
+      fi
 
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
 
     # Determining if the profile requires additional inputs. Running inspec exec in accordance.
-    - >
-        if [ -n "$INSPEC_INPUTS" ]; then
-          echo "Project requires inputs from - $INSPEC_INPUTS"
-          inspec exec $CI_PROJECT_DIR -t docker://$TARGET_CONTAINER_ID $INSPEC_REPORT_PARAMS --input-file $INSPEC_INPUTS || true;
-        else
-          echo "Project DOES NOT require additional inputs."
-          inspec exec $CI_PROJECT_DIR -t docker://$TARGET_CONTAINER_ID $INSPEC_REPORT_PARAMS || true;
-        fi
+    - if [ -n "$INSPEC_INPUTS" ]; then
+        echo "Project requires inputs from - $INSPEC_INPUTS" && inspec exec $CI_PROJECT_DIR -t docker://$TARGET_CONTAINER_ID $INSPEC_REPORT_PARAMS --input-file $INSPEC_INPUTS || true;
+      else
+        echo "Project DOES NOT require additional inputs." && inspec exec $CI_PROJECT_DIR -t docker://$TARGET_CONTAINER_ID $INSPEC_REPORT_PARAMS || true;
+      fi
 
     # Removing scanned container.
     - docker stop $TARGET_CONTAINER_ID && docker rm $TARGET_CONTAINER_ID
-
+    
     # Parse JSON files and produce summary file.
     - writer reports/raw/exec-results.json reports/pipeline/exec-results.json
     - inspec_tools summary -j reports/raw/exec-results.json -f > reports/raw/exec-summary.json
