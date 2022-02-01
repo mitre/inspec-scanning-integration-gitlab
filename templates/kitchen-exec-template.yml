@@ -14,8 +14,8 @@
     # Currently the pipeline setup injects AWS creds used in other executions
     # However on the Sandbox runner the IAM Instance profile creds has used.
     # unsetting the pipeline creds to use IAM Instance profile creds 
-    # - unset AWS_SECRET_ACCESS_KEY
-    # - unset AWS_ACCESS_KEY_ID
+    - unset AWS_SECRET_ACCESS_KEY
+    - unset AWS_ACCESS_KEY_ID
 
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
