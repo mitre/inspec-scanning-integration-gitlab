@@ -62,7 +62,7 @@
           if $VANILLA_COMPLIANCE_THRESHOLD; then
             inspec_tools summary -j ${vanilla_results[$i]} -i "$VANILLA_COMPLIANCE_THRESHOLD";
           else
-            inspec_tools summary -j ${vanilla_results[$i]} -f ./vanilla.threshold.yml;
+            inspec_tools summary -j ${vanilla_results[$i]} -f ./vanilla.threshold.yml | jq '.' > $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json;
           fi
         done
       fi
@@ -72,7 +72,7 @@
           if $HARDENED_COMPLIANCE_THRESHOLD; then
             inspec_tools summary -j ${vanilla_results[$i]} -i "$HARDENED_COMPLIANCE_THRESHOLD";
           else
-            inspec_tools summary -j ${vanilla_results[$i]} -f ./hardened.threshold.yml;
+            inspec_tools summary -j ${vanilla_results[$i]} -f ./hardened.threshold.yml | jq '.' > $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-hardened-summary.json;
           fi
         done
       fi
