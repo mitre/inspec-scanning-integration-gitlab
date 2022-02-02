@@ -4,7 +4,7 @@
     entrypoint: [""]
   stage: setup
   before_script:
-    - sudo yum install jq
+    - yum -y install jq
   script:
     - mkdir -p reports/{raw,pipeline}
     
