@@ -34,6 +34,8 @@
     - if [ "$DEBUG" = 'true' ]; then
         bundle exec kitchen list;
         bundle exec kitchen create;
+        bundle exec kitchen converge;
+        bundle exec kitchen verify;
       else
         bundle exec kitchen test --destroy=always || true;
       fi
