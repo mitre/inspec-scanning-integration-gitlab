@@ -54,9 +54,11 @@
 
     - echo "Display Summary for result file:${vanilla_results[$i]}";
     - inspec_tools summary -j ${vanilla_results[$i]} -t ./vanilla.threshold.yml > $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json;
+    - cat $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json;
 
     - echo "Display Summary for result file:${hardened_results[$i]}";
     - inspec_tools summary -j ${hardened_results[$i]} -t ./hardened.threshold.yml > $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-hardened-summary.json;
+    - cat $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-hardened-summary.json;
 
     - echo "Evaluate Complaince level for result file:${vanilla_results[$i]}";
     - inspec_tools compliance -j ${vanilla_results[$i]} -f ./vanilla.threshold.yml;
