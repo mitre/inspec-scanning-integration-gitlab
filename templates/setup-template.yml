@@ -4,8 +4,7 @@
     entrypoint: [""]
   stage: setup
   before_script:
-    - uname -a
-    - cat /etc/os-release
+    - apt-get install -y jq
   script:
     - mkdir -p reports/{raw,pipeline}
     
