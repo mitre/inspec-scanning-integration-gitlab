@@ -3,8 +3,6 @@
     name: $REGISTRY/ci/inspec-dev:$INSPEC_PIPELINE_TAG
     entrypoint: [""]
   stage: setup
-  before_script:
-    - apt-get install -y jq
   script:
     - mkdir -p reports/{raw,pipeline}
     
