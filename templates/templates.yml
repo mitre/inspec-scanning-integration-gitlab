@@ -6,3 +6,4 @@ include:
   - local: templates/publish-artifacts-template.yml
   - local: templates/publish-sync-template.yml
   - local: templates/setup-template.yml
+  - local: templates/verify-template.yml
