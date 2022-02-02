@@ -43,8 +43,8 @@
     - bundle exec kitchen destroy;
 
     # Tally up generated results
-    - vanilla_results=($CI_PROJECT_DIR/reports/raw/vanilla/*)
-    - hardened_results=($CI_PROJECT_DIR/reports/raw/hardened/*)
+    - vanilla_results=($CI_PROJECT_DIR/reports/raw/vanilla*)
+    - hardened_results=($CI_PROJECT_DIR/reports/raw/hardened*)
 
     - echo "Alert and fail if NO result files are generated"
     - if [ ${#vanilla_results[@]} -eq 0 ] && [ ${#hardened_results[@]} -eq 0 ]; then
