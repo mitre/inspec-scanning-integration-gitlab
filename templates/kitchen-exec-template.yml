@@ -76,6 +76,4 @@
     when: always
     expire_in: 1 month
     paths:
-    - $CI_PROJECT_DIR/reports/raw/vanilla/*.json
-    - $CI_PROJECT_DIR/reports/raw/hardened/*.json
-    - $CI_PROJECT_DIR/reports/raw/*-summary.json
+    - $CI_PROJECT_DIR/reports/raw/*.json
