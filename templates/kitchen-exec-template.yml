@@ -4,7 +4,7 @@
     entrypoint: [""]
   variables:
     CHEF_LICENSE: 'accept-silent'
-  stage: verify
+  stage: validate
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
