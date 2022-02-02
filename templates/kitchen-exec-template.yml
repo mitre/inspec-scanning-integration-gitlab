@@ -32,10 +32,10 @@
     - bundle install;
     # Run kitchen info/steps individually and verbosely if DEBUG is set to true
     - if [ "$DEBUG" = 'true' ]; then
-        bundle exec kitchen list;
-        bundle exec kitchen create;
-        bundle exec kitchen converge;
-        bundle exec kitchen verify;
+        bundle exec kitchen list || true;
+        bundle exec kitchen create || true;
+        bundle exec kitchen converge || true;
+        bundle exec kitchen verify || true;
       else
         bundle exec kitchen test --destroy=always || true;
       fi
