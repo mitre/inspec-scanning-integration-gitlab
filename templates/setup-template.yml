@@ -3,8 +3,11 @@
     name: $REGISTRY/ci/inspec-dev:$INSPEC_PIPELINE_TAG
     entrypoint: [""]
   stage: setup
+  before_script:
+    - sudo yum install jq
   script:
     - mkdir -p reports/{raw,pipeline}
+    
   artifacts:
     when: always
     paths:
