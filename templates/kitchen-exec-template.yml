@@ -19,10 +19,6 @@
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
 
-    # Setup required dirs for storing eval results
-    - mkdir -p reports/{raw,pipeline}
-    - mkdir -p reports/raw/{vanilla,hardened}
-
     # Create temporary ssh keys for test instances
     - ssh-keygen -f ssh_key -t ecdsa -b 521 -C "" -m PEM -N ""
 
