@@ -27,17 +27,8 @@
     # install dependencies for kitchen from the repository
     - bundle install;
 
-    - echo "listing local dir"
-    - ls -lah
-    - echo "catting files"
-    - echo "/opt/prepare_user_data.rb"
-    - cat /opt/prepare_user_data.rb
-    - echo "/opt/user_data.sh.erb"
-    - cat /opt/user_data.sh.erb
-    - echo "user_data.sh"
-    - cat user_data.sh
-    - cat ssh_key.pub
-    - sleep 30
+    - df -h
+
     # Run kitchen info/steps individually and verbosely if DEBUG is set to true
     - if [ "$DEBUG" = 'true' ]; then
         bundle exec kitchen list || true;
