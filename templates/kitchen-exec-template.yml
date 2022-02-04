@@ -41,36 +41,6 @@
     # Run destroy again to capture any stragglers
     - bundle exec kitchen destroy;
 
-    # Tally up generated results
-    - vanilla_results=($CI_PROJECT_DIR/reports/raw/vanilla*)
-    - hardened_results=($CI_PROJECT_DIR/reports/raw/hardened*)
-
-    - echo "Alert and fail if NO result files are generated"
-    - if [ ${#vanilla_results[@]} -eq 0 ] && [ ${#hardened_results[@]} -eq 0 ]; then
-         echo "No result files were generated";
-         echo "Pipeline failure";
-         exit 1;
-      fi
-
-    # - echo " Display summary of measure compliance of the eval jsons"
-    # - echo "Fail if compliance level not met"
-
-    # - echo "Display Summary for result file:${vanilla_results[$i]}";
-    # - inspec_tools summary -j ${vanilla_results[$i]} -t ./vanilla.threshold.yml > $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json;
-    # - cat $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json;
-
-    # - echo "Display Summary for result file:${hardened_results[$i]}";
-    # - inspec_tools summary -j ${hardened_results[$i]} -t ./hardened.threshold.yml > $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-hardened-summary.json;
-    # - cat $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-hardened-summary.json;
-
-    # - echo "Evaluate Complaince level for result file:${vanilla_results[$i]}";
-    # - inspec_tools compliance -j ${vanilla_results[$i]} -f ./vanilla.threshold.yml;
-          
-    # - echo "Evaluate Complaince level for result file:${hardened_results[$i]}";
-    # - inspec_tools compliance -j ${hardened_results[$i]} -f ./hardened.threshold.yml;
-
-    - echo "hit the end of script"
-
   allow_failure: false
   tags:
   - sandbox
