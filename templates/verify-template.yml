@@ -5,4 +5,13 @@
     entrypoint: [""]
   stage: verify
   script:
-      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla*.json
+      - echo "Running summary reports"
+      - echo "Vanilla"
+      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla*.json -j -o $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json;
+
+      - echo "Hardened"
+      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/hardened*.json -j -o $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-hardened-summary.json;
+
+      - echo "Verifying thresholds were met"
+      - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json -F ./vanilla.threshold.yml;
+      - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-hardened-summary.json -F ./hardened.threshold.yml;
