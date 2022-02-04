@@ -15,5 +15,3 @@
       - echo "Verifying thresholds were met"
       - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/ubi-vanilla*.json -F ./vanilla.threshold.yml;
       - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/ubi-hardened*.json -F ./hardened.threshold.yml;
-
-      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/BLAH*.json -j -o $CI_PROJECT_DIR/reports/raw/$CI_PIPELINE_ID-vanilla-summary.json;
