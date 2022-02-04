@@ -52,10 +52,6 @@
          exit 1;
       fi
 
-    - echo "running saf-cli container"
-    - docker run -v $CI_PROJECT_DIR/reports/raw:/share mitre/saf view:summary -i /share/vanilla-rhel7-ubi.json
-    # - docker run -v $CI_PROJECT_DIR/reports/raw:/share mitre/saf view:summary -i /share/${hardened_results[$i]}
-
     # - echo " Display summary of measure compliance of the eval jsons"
     # - echo "Fail if compliance level not met"
 
