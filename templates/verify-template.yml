@@ -1,9 +1,9 @@
 
 .ci:stage:saf:verify:
-  image:
-    name: mitre/saf:latest
-    entrypoint: [""]
+  # image:
+  #   name: mitre/saf:latest
+  #   entrypoint: [""]
   stage: verify
   script:
-      - view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla*.json
-      - view:summary -i $CI_PROJECT_DIR/reports/raw/hardened*.json
+      - docker run -it -v $CI_PROJECT_DIR/reports/raw:/share mitre/saf view:summary -i /share/vanilla*.json
+      - docker run -it -v $CI_PROJECT_DIR/reports/raw:/share mitre/saf view:summary -i /share/hardened*.json
