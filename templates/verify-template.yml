@@ -9,6 +9,7 @@
       - echo "Vanilla"
       - saf view:summary -i $CI_PROJECT_DIR/reports/raw/ubi-vanilla*.json -j -o $CI_PROJECT_DIR/reports/summary/$CI_PIPELINE_ID-ubi-vanilla-summary.json;
 
+      - ls $CI_PROJECT_DIR/reports/summary
       - echo "Hardened"
       - saf view:summary -i $CI_PROJECT_DIR/reports/raw/ubi-hardened*.json -j -o $CI_PROJECT_DIR/reports/summary/$CI_PIPELINE_ID-ubi-hardened-summary.json;
 
@@ -21,4 +22,4 @@
     when: always
     expire_in: 1 month
     paths:
-    - $CI_PROJECT_DIR/reports/summary/*.json
+    - $CI_PROJECT_DIR/reports/summary/*summary.json
