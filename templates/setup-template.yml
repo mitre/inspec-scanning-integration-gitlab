@@ -11,5 +11,6 @@
     paths:
         - $CI_PROJECT_DIR/reports/raw/
         - $CI_PROJECT_DIR/reports/pipeline/
+        - $CI_PROJECT_DIR/reports/summary/
   tags:
     - docker
