@@ -1,12 +1,7 @@
 
 .ci:stage:saf:verify:
-  # image:
-  #   name: mitre/saf:latest
-  #   entrypoint: [""]
+  image:
+    name: mitre/saf:latest
   stage: verify
   script:
-      - npx -y @mitre/saf view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla-rhel7-ubi.json
-      - echo $CI_PROJECT_DIR
-      - ls -lah $CI_PROJECT_DIR/reports/raw
-      - docker run -v $CI_PROJECT_DIR/reports/raw:/share --tty --entrypoint ls mitre/saf
-      - docker run -v $CI_PROJECT_DIR/reports/raw:/share --tty --entrypoint pwd mitre/saf
+      - view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla-rhel7-ubi.json
