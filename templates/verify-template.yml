@@ -5,7 +5,7 @@
   #   entrypoint: [""]
   stage: verify
   script:
-      - npx @mitre/saf view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla-rhel7-ubi.json
+      - npx -y @mitre/saf view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla-rhel7-ubi.json
       - echo $CI_PROJECT_DIR
       - ls -lah $CI_PROJECT_DIR/reports/raw
       - docker run -v $CI_PROJECT_DIR/reports/raw:/share --tty --entrypoint ls mitre/saf
