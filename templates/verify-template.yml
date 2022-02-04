@@ -9,3 +9,4 @@
       - echo $CI_PROJECT_DIR
       - ls -lah $CI_PROJECT_DIR/reports/raw
       - docker run -v $CI_PROJECT_DIR/reports/raw:/share --tty --entrypoint ls mitre/saf
+      - docker run -v $CI_PROJECT_DIR/reports/raw:/share --tty --entrypoint pwd mitre/saf
