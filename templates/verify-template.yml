@@ -9,7 +9,6 @@
       - echo "Vanilla"
       - saf view:summary -i $CI_PROJECT_DIR/reports/raw/ubi-vanilla*.json -j | jq '.'
 
-      - ls $CI_PROJECT_DIR/reports/summary
       - echo "Hardened"
       - saf view:summary -i $CI_PROJECT_DIR/reports/raw/ubi-hardened*.json -j | jq '.'
 
