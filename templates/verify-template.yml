@@ -2,6 +2,7 @@
 .ci:stage:saf:verify:
   image:
     name: mitre/saf:latest
+    entrypoint: [""]
   stage: verify
   script:
       - view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla*.json
