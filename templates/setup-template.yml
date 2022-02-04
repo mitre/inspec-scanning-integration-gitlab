@@ -4,7 +4,7 @@
     entrypoint: [""]
   stage: setup
   script:
-    - mkdir -p reports/{raw,pipeline}
+    - mkdir -p reports/{raw,pipeline,summary}
     
   artifacts:
     when: always
