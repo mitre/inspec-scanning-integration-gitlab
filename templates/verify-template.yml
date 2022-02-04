@@ -8,5 +8,5 @@
       - pwd
       - echo $CI_PROJECT_DIR
       - ls -lah $CI_PROJECT_DIR/reports/raw
-      - docker run -v /builds/scv-content/inspec/operating-systems/redhat-enterprise-linux-7-stig-baseline/reports/raw:/share mitre/saf view:summary -i /share/vanilla-rhel7-ubi.json
+      - docker run --mount type=bind,src=$CI_PROJECT_DIR/reports/raw,dst=/share view:summary -i /share/vanilla-rhel7-ubi.json
       - docker run -v /builds/scv-content/inspec/operating-systems/redhat-enterprise-linux-7-stig-baseline/reports/raw:/share mitre/saf view:summary -i /share/hardened-rhel7-ubi.json
