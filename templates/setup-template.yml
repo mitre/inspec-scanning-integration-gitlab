@@ -4,13 +4,12 @@
     entrypoint: [""]
   stage: setup
   script:
-    - mkdir -p reports/{raw,pipeline,summary}
+    - mkdir -p reports/{raw,pipeline}
     
   artifacts:
     when: always
     paths:
         - $CI_PROJECT_DIR/reports/raw/
         - $CI_PROJECT_DIR/reports/pipeline/
-        - $CI_PROJECT_DIR/reports/summary/
   tags:
     - docker
