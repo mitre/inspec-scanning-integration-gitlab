@@ -2,7 +2,7 @@
 .ci:stage:saf:verify:
   image:
     name: node:latest
-    entrypoint: ["bash"]
+    entrypoint: [""]
   stage: verify
   script:
       - npx -y @mitre/saf view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla*.json
