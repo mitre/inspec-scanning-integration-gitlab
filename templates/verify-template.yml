@@ -1,7 +1,8 @@
 
 .ci:stage:saf:verify:
   image:
-    name: mitre/saf:latest
+    name: node:latest
+    entrypoint: ["bash"]
   stage: verify
   script:
-      - view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla-rhel7-ubi.json
+      - npx -y @mitre/saf view:summary -i $CI_PROJECT_DIR/reports/raw/vanilla*.json
