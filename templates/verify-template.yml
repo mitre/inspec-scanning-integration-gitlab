@@ -5,5 +5,5 @@
   #   entrypoint: [""]
   stage: verify
   script:
-      - docker run -v ($CI_PROJECT_DIR/reports/raw):/share mitre/saf view:summary -i /share/vanilla-rhel7-ubi.json
-      - docker run -v ($CI_PROJECT_DIR/reports/raw):/share mitre/saf view:summary -i /share/hardened-rhel7-ubi.json
+      - docker run -v $CI_PROJECT_DIR/reports/raw:/share mitre/saf view:summary -i /share/vanilla-rhel7-ubi.json
+      - docker run -v $CI_PROJECT_DIR/reports/raw:/share mitre/saf view:summary -i /share/hardened-rhel7-ubi.json
