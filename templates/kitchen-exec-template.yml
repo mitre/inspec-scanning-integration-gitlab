@@ -24,20 +24,33 @@
 
     # Create user data script content to upload the ssh pub key to test instance
     - ruby /opt/prepare_user_data.rb /opt/user_data.sh.erb ./ssh_key.pub user_data.sh
-    # install dependencies for kitchen from the repository
-    - bundle install || true;
+    
+    # Does the profile have gem dependencies? If so, use bundle to make sure they
+    # are respected
+    - if [ -f "./Gemfile" ]; then
 
-    # Run kitchen info/steps individually and verbosely if DEBUG is set to true
-    - if [ "$DEBUG" = 'true' ]; then
-        bundle exec kitchen list || true;
-        bundle exec kitchen create || true;
-        bundle exec kitchen converge || true;
-        bundle exec kitchen verify || true;
+        bundle install;
+
+        if [ "$DEBUG" = 'true' ]; then
+          bundle exec kitchen list || true;
+          bundle exec kitchen create || true;
+          bundle exec kitchen converge || true;
+          bundle exec kitchen verify || true;
+          bundle exec kitchen destroy || true;
+        else
+          bundle exec kitchen test --destroy=always || true;
+        fi
       else
-        bundle exec kitchen test --destroy=always || true;
+        if [ "$DEBUG" = 'true' ]; then
+          kitchen list || true;
+          kitchen create || true;
+          kitchen converge || true;
+          kitchen verify || true;
+          kitchen destroy || true;
+        else
+          kitchen test --destroy=always || true;
+        fi
       fi
-    # Run destroy again to capture any stragglers
-    - bundle exec kitchen destroy;
 
   allow_failure: false
   tags:
