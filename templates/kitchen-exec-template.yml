@@ -25,9 +25,7 @@
     # Create user data script content to upload the ssh pub key to test instance
     - ruby /opt/prepare_user_data.rb /opt/user_data.sh.erb ./ssh_key.pub user_data.sh
     # install dependencies for kitchen from the repository
-    - bundle install;
-
-    - df -h
+    - bundle install || true;
 
     # Run kitchen info/steps individually and verbosely if DEBUG is set to true
     - if [ "$DEBUG" = 'true' ]; then
