@@ -4,95 +4,60 @@
     entrypoint: [""]
   variables:
     CHEF_LICENSE: 'accept-silent'
-  stage: verify
+  stage: validate
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
     # Set region for AWS calls
-    - export AWS_DEFAULT_REGION=us-gov-west-1
+    # - export AWS_DEFAULT_REGION=us-gov-west-1
 
     # Currently the pipeline setup injects AWS creds used in other executions
     # However on the Sandbox runner the IAM Instance profile creds has used.
     # unsetting the pipeline creds to use IAM Instance profile creds 
     - unset AWS_SECRET_ACCESS_KEY
     - unset AWS_ACCESS_KEY_ID
-
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
-
-    # Setup required dirs for storing eval results
-    - mkdir -p reports/{raw,pipeline}
-    - mkdir -p reports/raw/{vanilla,hardened}
 
     # Create temporary ssh keys for test instances
     - ssh-keygen -f ssh_key -t ecdsa -b 521 -C "" -m PEM -N ""
 
     # Create user data script content to upload the ssh pub key to test instance
     - ruby /opt/prepare_user_data.rb /opt/user_data.sh.erb ./ssh_key.pub user_data.sh
+    
+    # Does the profile have gem dependencies? If so, use bundle to make sure they
+    # are respected
+    - if [ -f "./Gemfile" ]; then
 
-    # Run kitchen info/steps individually and verbosely if DEBUG is set to true
-    - if [ "$DEBUG" = 'true' ]; then
-        kitchen diagnose;
-        kitchen list;
-        kitchen destroy -l debug || true;
-        kitchen create -l debug || true;
-        kitchen converge -l debug || true;
-        kitchen setup -l debug || true;
-        kitchen verify -l debug || true;
-        kitchen destroy -l debug || true;
+        bundle install;
+
+        if [ "$DEBUG" = 'true' ]; then
+          bundle exec kitchen list || true;
+          bundle exec kitchen create || true;
+          bundle exec kitchen converge || true;
+          bundle exec kitchen verify || true;
+          bundle exec kitchen destroy || true;
+        else
+          bundle exec kitchen test --destroy=always || true;
+        fi
       else
-        kitchen test --destroy=always || true;
-      fi
-    # Run destroy again to capture any stragglers
-    - kitchen destroy 
-
-    # Tally up generated results
-    - vanilla_results=($CI_PROJECT_DIR/reports/raw/vanilla/*)
-    - hardened_results=($CI_PROJECT_DIR/reports/raw/hardened/*)
-
-    # Alert and fail if NO result files are generated
-    - if [ ${#vanilla_results[@]} -eq 0 ] && [ ${#hardened_results[@]} -eq 0 ]; then
-         echo "No result files were generated";
-         echo "Pipeline failure";
-         exit 1;
-      fi
-
-    # Display summary of measure compliance of the eval jsons
-    # Fail if compliance level not met
-
-    - if [ ${#vanilla_results[@]} -gt 0 ]; then
-        for ((i=0; i<${#vanilla_results[@]}; i++)); do
-          echo "Display Summary for result file:${vanilla_results[$i]}";
-          inspec_tools summary -j ${vanilla_results[$i]} -i "$VANILLA_COMPLIANCE_THRESHOLD";
-        done
-      fi
-    - if [ ${#hardened_results[@]} -gt 0 ]; then
-        for ((i=0; i<${#hardened_results[@]}; i++)); do
-          echo "Display Summary for result file:${hardened_results[$i]}";
-          inspec_tools summary -j ${hardened_results[$i]} -i "$HARDENED_COMPLIANCE_THRESHOLD";
-        done
-      fi
-
-    - if [ ${#vanilla_results[@]} -gt 0 ]; then
-        for ((i=0; i<${#vanilla_results[@]}; i++)); do
-          echo "Evaluate Complaince level for result file:${vanilla_results[$i]}";
-          inspec_tools compliance -j ${vanilla_results[$i]} -i "$VANILLA_COMPLIANCE_THRESHOLD";
-        done
-      fi
-
-    - if [ ${#hardened_results[@]} -gt 0 ]; then
-        for ((i=0; i<${#hardened_results[@]}; i++)); do
-          echo "Evaluate Complaince level for result file:${hardened_results[$i]}";
-          inspec_tools compliance -j ${hardened_results[$i]} -i "$HARDENED_COMPLIANCE_THRESHOLD";
-        done
+        if [ "$DEBUG" = 'true' ]; then
+          kitchen list || true;
+          kitchen create || true;
+          kitchen converge || true;
+          kitchen verify || true;
+          kitchen destroy || true;
+        else
+          kitchen test --destroy=always || true;
+        fi
       fi
 
   allow_failure: false
   tags:
   - sandbox
   artifacts:
+    name: "$CI_JOB_NAME"
     when: always
+    expire_in: 1 month
     paths:
-    - $CI_PROJECT_DIR/reports/raw/vanilla/*.json
-    - $CI_PROJECT_DIR/reports/raw/hardened/*.json
-    - $CI_PROJECT_DIR/reports/raw/*-summary.json
+    - $CI_PROJECT_DIR/reports/raw/*.json

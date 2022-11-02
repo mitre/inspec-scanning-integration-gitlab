@@ -1,0 +1,34 @@
+.ci:stage:saf:verify:
+  image:
+    name: mitre/saf
+    entrypoint: [""]
+  stage: verify
+  script:
+      - echo "Running summary reports"
+
+      - echo "Vanilla Container"
+      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/container-vanilla*.json -j | jq -C '.' || true;
+
+      - echo "Hardened Container"
+      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/container-hardened*.json -j | jq -C '.' || true;
+
+      - echo "Vanilla EC2"
+      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/ec2-vanilla*.json -j | jq -C '.' || true;
+
+      - echo "Hardened EC2"
+      - saf view:summary -i $CI_PROJECT_DIR/reports/raw/ec2-hardened*.json -j | jq -C '.' || true;
+
+      - echo "Verifying thresholds were met"
+
+      - echo "Vanilla Container"
+      - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/container-vanilla*.json -F ./container.vanilla.threshold.yml;
+
+      - echo "Hardened Container"
+      - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/container-hardened*.json -F ./container.hardened.threshold.yml;
+
+      - echo "Vanilla EC2"
+      - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/ec2-vanilla*.json -F ./ec2.vanilla.threshold.yml;
+      
+      - echo "Hardened EC2"
+      - saf validate:threshold -i $CI_PROJECT_DIR/reports/raw/ec2-hardened*.json -F ./ec2.hardened.threshold.yml;
+

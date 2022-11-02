@@ -2,7 +2,7 @@
   image:
     name: $REGISTRY/ci/cook-dev:$INSPEC_PIPELINE_TAG
     entrypoint: [""]
-  stage: verify
+  stage: linting
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:

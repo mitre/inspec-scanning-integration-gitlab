@@ -5,6 +5,7 @@
   stage: setup
   script:
     - mkdir -p reports/{raw,pipeline}
+    
   artifacts:
     when: always
     paths:
