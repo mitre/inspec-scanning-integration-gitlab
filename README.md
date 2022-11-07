@@ -188,3 +188,17 @@ suites:
 ### CI/CD Variables
 
 Note the Kitchen files include syntax to reference [CI/CD variables](https://docs.gitlab.com/ee/ci/variables/) set in the Gitlab repository settings (ex. `image_id: <%= ENV['AMI_ID'] %>`). CI/CD variables are copied over to the Gitlab runner as environment variables during pipeline execution. Ensure that data which should remain secret (*especially your AWS config*) are stored as CI/CD variables; do not commit them as code.
+
+## Gitlab CI/CD Variables
+
+These templates expect certain environment variables to be available to the Gitlab Runner, which can be done most easily by setting them as CI/CD variables in the project that will include the templates.
+
+## Required Variables List
+
+- REGISTRY: The private registry link that you will use to store pipeline container images, ex. `https://your.registry.org`
+- INSPEC_RUNNER_IMAGE_ID: The container ID of an image containing the InSpec executable. Tested with `chef/chefworkstation`.
+- INSPEC_RUNNER_IMAGE_TAG: The tag of the image containing the InSpec executable, ex. `latest`.
+
+## Debugging
+
+Run the pipeline with a CI/CD variable `DEBUG=true` to run each step of the Test Kitchen execution in order instead of all at once (the default behavior of running `kitchen test`).

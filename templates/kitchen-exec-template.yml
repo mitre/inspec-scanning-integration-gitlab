@@ -1,6 +1,6 @@
 .ci:stage:kitchen-exec:inspec:
   image:
-    name: $REGISTRY/ci/inspec-kitchen-dev:$INSPEC_PIPELINE_TAG
+    name: $REGISTRY/$INSPEC_RUNNER_IMAGE_ID:$INSPEC_RUNNER_IMAGE_TAG
     entrypoint: [""]
   variables:
     CHEF_LICENSE: 'accept-silent'
@@ -8,22 +8,9 @@
   before_script:
     - export CI_JOB_TIMESTAMP=$(date --utc --iso-8601=seconds)
   script:
-    # Set region for AWS calls
-    # - export AWS_DEFAULT_REGION=us-gov-west-1
 
-    # Currently the pipeline setup injects AWS creds used in other executions
-    # However on the Sandbox runner the IAM Instance profile creds has used.
-    # unsetting the pipeline creds to use IAM Instance profile creds 
-    - unset AWS_SECRET_ACCESS_KEY
-    - unset AWS_ACCESS_KEY_ID
     # Echoing out the Inspec version for this run.
     - echo "Using Inspec Version - $(inspec version)"
-
-    # Create temporary ssh keys for test instances
-    - ssh-keygen -f ssh_key -t ecdsa -b 521 -C "" -m PEM -N ""
-
-    # Create user data script content to upload the ssh pub key to test instance
-    - ruby /opt/prepare_user_data.rb /opt/user_data.sh.erb ./ssh_key.pub user_data.sh
     
     # Does the profile have gem dependencies? If so, use bundle to make sure they
     # are respected
