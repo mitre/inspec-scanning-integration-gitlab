@@ -1,6 +1,6 @@
 .ci:stage:setup:inspec:
   image:
-    name: $REGISTRY/ci/inspec-dev:$INSPEC_PIPELINE_TAG
+    name: $REGISTRY/$INSPEC_RUNNER_IMAGE_ID:$INSPEC_RUNNER_IMAGE_TAG
     entrypoint: [""]
   stage: setup
   script:
